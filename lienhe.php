@@ -73,46 +73,6 @@
         color: var(--primary-color);
     }
 
-    .contact-info a:hover {
-        color: var(--primary-dark);
-    }
-    .contact-info, .working-hours {
-        margin-bottom: 30px;
-    }
-    .contact-form input,
-    .contact-form textarea {
-        width: 100%;
-        padding: 12px;
-        margin: 8px 0 20px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 16px;
-        transition: border-color 0.3s ease;
-    }
-    .contact-form button {
-        width: 100%;
-        padding: 12px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-    .contact-form button:hover {
-        background-color: #388E3C;
-    }
-    .working-hours {
-        margin-bottom: 0;
-    }
-    .contact-form label {
-        font-weight: bold;
-        color: #555;
-        display: block;
-        margin-bottom: 5px;
-    }
         #leaflet-map {
             width: 100%;
             height: 450px;
@@ -134,343 +94,226 @@
             font-style: italic;
             color: #555;
         }
+        .content {
+            display: flex;
+            gap: 30px;
+            padding: 0;
+            margin-top: 20px;
+        }
+        .map {
+            margin-bottom: 20px;
+        }
+        .header-section {
+            position: relative;
+            text-align: center;
+            padding: 50px 0;
+            background-image: url('images/photo_6314310101258846449_w.jpg');
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 30px;
+        }
+
+        .header-section h1 {
+            position: relative;
+            z-index: 2;
+            color: #FFD700;
+            text-transform: uppercase;
+            font-size: 2.5em;
+            margin: 0;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            letter-spacing: 2px;
+        }
+
+        /* Popup styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .success-icon {
+            color: #4CAF50;
+            font-size: 70px;
+            margin-bottom: 25px;
+        }
+
+        .popup-content h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        .popup-content p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+
+        .close-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background-color: #388E3C;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        <?php 
+            include 'assets/CSS/navbar.css';
+            include 'assets/CSS/footer.css';
+        ?>
+        .contact-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .contact-header h1 {
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        .contact-header p {
+            color: var(--text-light);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .contact-info-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .contact-info-item {
+            flex: 1;
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-info-item i {
+            color: #4CAF50;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .contact-info-item h3 {
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .contact-info-item p, 
+        .contact-info-item a {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .contact-info-item a:hover {
+            color: #388E3C;
+        }
+
         .contact-form {
-        background: white;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    }
-    .contact-form h2 {
-        margin-bottom: 15px;
-        font-size: 20px;
-        color: #000000;  
-    }
-    .contact-form input,
-    .contact-form textarea {
-        padding: 8px;         
-        margin: 5px 0 15px;   
-    }
-        .form-description {
-        margin-bottom: 15px;
-        font-size: 14px;
-    }
-    .content {
-        display: flex;
-        gap: 30px;
-        padding: 0;
-        margin-top: 20px;
-    }
-    .map {
-        margin-bottom: 20px;
-    }
-    .header-section {
-        position: relative;
-        text-align: center;
-        padding: 50px 0;
-        background-image: url('images/photo_6314310101258846449_w.jpg');
-        background-size: cover;
-        background-position: center;
-        margin-bottom: 30px;
-    }
-
-    .header-section h1 {
-        position: relative;
-        z-index: 2;
-        color: #FFD700;
-        text-transform: uppercase;
-        font-size: 2.5em;
-        margin: 0;
-        font-weight: bold;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        letter-spacing: 2px;
-    }
-
-    /* Popup styles */
-    .popup-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: none; /* Changed from flex to none */
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
-
-    .popup-content {
-        background-color: white;
-        padding: 30px;
-        border-radius: 10px;
-        text-align: center;
-        max-width: 400px;
-        position: relative;
-        animation: slideIn 0.3s ease-out;
-    }
-
-    @keyframes slideIn {
-        from {
-            transform: translateY(-100px);
-            opacity: 0;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        to {
-            transform: translateY(0);
-            opacity: 1;
+
+        .form-group {
+            margin-bottom: 20px;
         }
-    }
 
-    .success-icon {
-        color: #4CAF50;
-        font-size: 50px;
-        margin-bottom: 20px;
-    }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
 
-    .popup-content h2 {
-        color: #333;
-        margin-bottom: 15px;
-        border-bottom: none;
-    }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: var(--text-dark);
+        }
 
-    .popup-content p {
-        color: #666;
-        margin-bottom: 25px;
-    }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
 
-    .close-btn {
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        padding: 10px 30px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s;
-    }
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
 
-    .close-btn:hover {
-        background-color: #388E3C;
-    }
+        .submit-btn:hover {
+            background-color: #388E3C;
+        }
 
-    <?php 
-        include 'assets/CSS/navbar.css';
-        include 'assets/CSS/footer.css';
-    ?>
-    .contact-container {
-        max-width: 1200px;
-        margin: 40px auto;
-        padding: 0 20px;
-    }
-
-    .contact-header {
-        text-align: center;
-        margin-bottom: 40px;
-    }
-
-    .contact-header h1 {
-        color: var(--text-dark);
-        margin-bottom: 15px;
-    }
-
-    .contact-header p {
-        color: var(--text-light);
-        font-size: 16px;
-        line-height: 1.6;
-    }
-
-    .contact-info-container {
-        display: flex;
-        gap: 30px;
-        margin-bottom: 40px;
-    }
-
-    .contact-info-item {
-        flex: 1;
-        text-align: center;
-        padding: 30px;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .contact-info-item i {
-        color: #4CAF50;
-        font-size: 32px;
-        margin-bottom: 15px;
-    }
-
-    .contact-info-item h3 {
-        color: var(--text-dark);
-        margin-bottom: 10px;
-    }
-
-    .contact-info-item p, 
-    .contact-info-item a {
-        color: var(--text-light);
-        text-decoration: none;
-    }
-
-    .contact-info-item a:hover {
-        color: #388E3C;
-    }
-
-    .contact-form {
-        background: white;
-        padding: 40px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        color: var(--text-dark);
-        font-weight: 500;
-    }
-
-    .form-group input,
-    .form-group textarea {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        color: var(--text-dark);
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus {
-        border-color: #4CAF50;
-        outline: none;
-    }
-
-    .submit-btn {
-        background-color: #4CAF50;
-        color: white;
-        padding: 12px 30px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: 500;
-        transition: background-color 0.3s;
-    }
-
-    .submit-btn:hover {
-        background-color: #388E3C;
-    }
-
-    /* Map container */
-    .map-container {
-        margin-top: 40px;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .contact-info i.fas,
-    .contact-info i.fab,
-    .working-hours i.far {
-        width: 20px;
-        color: #4CAF50 !important;
-    }
-
-    .contact-info .fab.fa-facebook,
-    .contact-info .fab.fa-instagram {
-        color: #4CAF50 !important;
-    }
-
-    .contact-info a {
-        color: #4CAF50;
-        text-decoration: none;
-    }
-
-    .contact-info a:hover {
-        color: #388E3C;
-    }
-
-    .contact-form button,
-    .contact-form .submit-btn {
-        background-color: #4CAF50;
-        color: white;
-    }
-
-    .contact-form button:hover,
-    .contact-form .submit-btn:hover {
-        background-color: #388E3C;
-    }
-
-    .contact-form input:focus,
-    .contact-form textarea:focus {
-        border-color: #4CAF50;
-    }
-
-    /* Thêm một class container mới cho phần contact */
-    .contact-section {
-        --contact-primary: #4CAF50;
-        --contact-dark: #388E3C;
-    }
-
-    /* Cập nhật tất cả các selector để sử dụng class mới */
-    .contact-section .contact-info i.fas,
-    .contact-section .contact-info i.fab,
-    .contact-section .working-hours i.far {
-        width: 20px;
-        color: var(--contact-primary) !important;
-    }
-
-    .contact-section .contact-info .fab.fa-facebook,
-    .contact-section .contact-info .fab.fa-instagram {
-        color: var(--contact-primary) !important;
-    }
-
-    .contact-section .contact-info a {
-        color: var(--contact-primary);
-        text-decoration: none;
-    }
-
-    .contact-section .contact-info a:hover {
-        color: var(--contact-dark);
-    }
-
-    .contact-section .contact-info {
-        --contact-primary: #4CAF50;
-        --contact-dark: #388E3C;
-    }
-
-    /* Chỉ áp dụng cho các icon và link trong phần contact-info của contact-section */
-    .contact-section .contact-info i.fas,
-    .contact-section .contact-info i.fab,
-    .contact-section .working-hours i.far {
-        width: 20px;
-        color: var(--contact-primary) !important;
-    }
-
-    /* Chỉ áp dụng cho các link trong phần contact-info */
-    .contact-section .contact-info p a {
-        color: var(--contact-primary);
-        text-decoration: none;
-    }
-
-    .contact-section .contact-info p a:hover {
-        color: var(--contact-dark);
-    }
-
-    /* Chỉ áp dụng cho social media icons trong contact-info */
-    .contact-section .contact-info .fab.fa-facebook,
-    .contact-section .contact-info .fab.fa-instagram {
-        color: var(--contact-primary) !important;
-    }
+        /* Map container */
+        .map-container {
+            margin-top: 40px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
 <?php
     include 'navbar.php';
     ?>
-    <div class="container contact-section">
+    <main class="container contact-section">
         <div class="header-section">
             <h1>liên hệ</h1>
         </div>
@@ -529,30 +372,40 @@
                     <h2>Gửi tin nhắn cho chúng tôi</h2>
                     <p class="form-description">Mọi thắc mắc và yêu cầu hỗ trợ. Vui lòng để lại thông tin tại đây.</p>
                     <form id="contact-form" action="#" method="post">
-                        <label for="name">Họ và tên</label>
-                        <input type="text" id="name" name="name" placeholder="Nhập họ và tên của bạn" required>
-                
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Nhập địa chỉ email của bạn" required>
-                
-                        <label for="phone">Số điện thoại</label>
-                        <input type="tel" id="phone" name="phone" placeholder="Nhập số điện thoại của bạn" required>
-                
-                        <label for="subject">Chủ đề</label>
-                        <input type="text" id="subject" name="subject" placeholder="Nhập chủ đề liên hệ" required>
-                
-                        <label for="message">Nội dung</label>
-                        <textarea id="message" name="message" rows="5" placeholder="Nhập nội dung của bạn" required></textarea>
-                
-                        <button type="submit">Gửi thông tin</button>
+                        <div class="form-group">
+                            <label for="name">Họ và tên</label>
+                            <input type="text" id="name" name="name" placeholder="Nhập họ và tên của bạn" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Nhập địa chỉ email của bạn" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Nhập số điện thoại của bạn" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Chủ đề</label>
+                            <input type="text" id="subject" name="subject" placeholder="Nhập chủ đề liên hệ" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Nội dung</label>
+                            <textarea id="message" name="message" rows="5" placeholder="Nhập nội dung của bạn" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Gửi thông tin</button>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- Add popup php before closing body tag -->
-    <div class="popup-container" id="successPopup">
+    <!-- Sửa lại cấu trúc popup -->
+    <div class="popup-overlay" id="successPopup">
         <div class="popup-content">
             <i class="fas fa-check-circle success-icon"></i>
             <h2>Gửi thông tin thành công!</h2>
@@ -564,24 +417,6 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Update form submission handler
-        document.getElementById('contact-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            
-            // Lưu thông tin form vào localStorage nếu cần
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                subject: document.getElementById('subject').value,
-                message: document.getElementById('message').value
-            };
-            localStorage.setItem('contactFormData', JSON.stringify(formData));
-            
-            // Show popup
-            showPopup();
-        });
-
         function showPopup() {
             const popup = document.getElementById('successPopup');
             popup.style.display = 'flex';
@@ -590,12 +425,43 @@
         function closePopup() {
             const popup = document.getElementById('successPopup');
             popup.style.display = 'none';
-            // Reset form
             document.getElementById('contact-form').reset();
         }
 
+        // Xử lý click outside
+        window.onclick = function(event) {
+            const popup = document.getElementById('successPopup');
+            if (event.target == popup) {
+                closePopup();
+            }
+        }
+
+        // Cập nhật event listener form submit
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+
+            fetch('submit_contact.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showPopup();
+                } else {
+                    alert('Có lỗi xảy ra khi gửi form. Vui lòng thử lại sau.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra khi gửi form. Vui lòng thử lại sau.');
+            });
+        });
+
         // Khởi tạo bản đồ Leaflet
-        const map = L.map('leaflet-map').setView([10.8575505, 106.7626846], 18); // Tăng mức zoom lên 18
+        const map = L.map('leaflet-map').setView([10.8575505, 106.7626846], 17); 
 
         // Thêm lớp bản đồ từ OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -608,7 +474,7 @@
             .openPopup();
     </script>
 <?php
- include 'footer.php';
- ?>
+    include 'footer.php';
+?>
 </body>
-    </html>
+</html>
