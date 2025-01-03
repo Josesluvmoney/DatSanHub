@@ -107,8 +107,27 @@ session_start();
         .court:hover {
             background-color: #b2dfdb;
         }
-        <?php include 'Assets\CSS\navbar.php'; ?>
-        <?php include 'Assets\CSS\footer.php'; ?>
+        <?php include 'Assets\CSS\navbar.css'; ?>
+        <?php include 'Assets\CSS\footer.css'; ?>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        .container {
+            flex: 1;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+        }
+
+        footer {
+            margin-top: auto;
+        }
     </style>
 </head>
 <body>
