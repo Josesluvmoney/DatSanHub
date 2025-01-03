@@ -122,7 +122,7 @@
 
             <div class="divider">hoặc</div>
 
-            <form action="reg.php" method="POST">
+            <form id="registerForm">
                 <div class="form-group">
                     <label for="reg-name">Họ và tên</label>
                     <input type="text" id="reg-name" name="fullname" required placeholder="Nhập họ và tên">
@@ -135,7 +135,7 @@
                     <label for="reg-password">Mật khẩu</label>
                     <input type="password" id="reg-password" name="password" required placeholder="Nhập mật khẩu">
                 </div>
-                <button type="submit" name="register" class="btn btn-primary">Đăng Ký</button>
+                <button type="submit" class="btn btn-primary">Đăng Ký</button>
             </form>
             
             <div class="login-link">
@@ -426,60 +426,60 @@
             }
         });
 
-        document.querySelector('#loginPopup form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            
-            fetch('login.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Đóng popup đăng nhập
-                    closePopup('loginPopup');
-                    
-                    // Hiển thị thông báo thành công
-                    showNotification(`
-                        <div class="success-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <h3 style="color: #4CAF50;">Đăng nhập thành công!</h3>
-                        <p>Chào mừng bạn đã quay trở lại.</p>
-                    `);
-                    
-                    // Reload trang sau 1 giây
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
-                } else {
+        // Xử lý form đăng ký
+        const registerForm = document.getElementById('registerForm');
+        if (registerForm) {
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                formData.append('register', 'true'); // Thêm flag register
+                
+                fetch('reg.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        closePopup('registerPopup');
+                        showNotification(`
+                            <div class="success-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h3 style="color: #4CAF50;">Đăng ký thành công!</h3>
+                            <p>Chào mừng bạn đến với DatSanHub.</p>
+                        `);
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        showNotification(`
+                            <div class="error-icon">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <h3 class="error-title">Đăng ký không thành công</h3>
+                            <p>${data.message}</p>
+                            <div class="notification-buttons">
+                                <button class="retry-btn" onclick="closePopup('notificationPopup'); showPopup('registerPopup');">
+                                    <i class="fas fa-redo"></i> Thử lại
+                                </button>
+                            </div>
+                        `);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                     showNotification(`
                         <div class="error-icon">
                             <i class="fas fa-exclamation-circle"></i>
                         </div>
-                        <h3 class="error-title">Đăng nhập không thành công</h3>
-                        <p>${data.message}</p>
-                        <div class="notification-buttons">
-                            <button class="retry-btn" onclick="closePopup('notificationPopup'); showPopup('loginPopup');">
-                                <i class="fas fa-redo"></i> Thử lại
-                            </button>
-                        </div>
+                        <h3 class="error-title">Lỗi</h3>
+                        <p>Có lỗi xảy ra. Vui lòng thử lại sau.</p>
                     `);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification(`
-                    <div class="error-icon">
-                        <i class="fas fa-exclamation-circle"></i>
-                    </div>
-                    <h3 class="error-title">Lỗi</h3>
-                    <p>Có lỗi xảy ra. Vui lòng thử lại sau.</p>
-                `);
+                });
             });
-        });
+        }
     </script>
 
     <style>
