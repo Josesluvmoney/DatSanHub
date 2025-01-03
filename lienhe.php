@@ -411,11 +411,11 @@
                     <h2>Giờ làm việc</h2>
                     <p>
                         <i class="far fa-clock" style="width: 20px; color: #2196F3;"></i>
-                        <strong>Thứ 2 - Thứ 6:</strong> 7:00 AM - 8:00 PM
+                        <strong>Mọi ngày trong tuần:</strong> 5:00 AM - 11:00 PM
                     </p>
                     <p>
                         <i class="far fa-clock" style="width: 20px; color: #2196F3;"></i>
-                        <strong>Thứ 7 - Chủ nhật:</strong> 7:00 AM - 10:00 PM
+                        <strong>Các ngày lễ, tết:</strong> 7:00 AM - 9:00 PM
                     </p>
                 </div>
             </div>
