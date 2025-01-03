@@ -310,32 +310,6 @@ session_start();
             overflow: hidden;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-
-        .login-required-message {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 30px;
-            margin: 20px 0;
-        }
-
-        .login-required-message p {
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        .login-required-message .submit-btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        .login-required-message .submit-btn:hover {
-            background-color: #388E3C;
-        }
     </style>
 </head>
 <body>
@@ -400,131 +374,89 @@ session_start();
                 <div class="contact-form">
                     <h2>Gửi tin nhắn cho chúng tôi</h2>
                     <p class="form-description">Mọi thắc mắc và yêu cầu hỗ trợ. Vui lòng để lại thông tin tại đây.</p>
-                    
-                    <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
-                        <form id="contact-form" action="#" method="post">
-                            <div class="form-group">
-                                <label for="name">Họ và tên</label>
-                                <input type="text" id="name" name="name" value="<?php echo $_SESSION['name']; ?>" readonly>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" name="email" value="<?php echo $_SESSION['email']; ?>" readonly>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="phone">Số điện thoại</label>
-                                <input type="tel" id="phone" name="phone" placeholder="Nhập số điện thoại của bạn" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="subject">Chủ đề</label>
-                                <input type="text" id="subject" name="subject" placeholder="Nhập chủ đề liên hệ" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="message">Nội dung</label>
-                                <textarea id="message" name="message" rows="5" placeholder="Nhập nội dung của bạn" required></textarea>
-                            </div>
-                            
-                            <button type="submit" class="submit-btn">Gửi thông tin</button>
-                        </form>
-                    <?php else: ?>
-                        <div class="login-required-message" style="text-align: center; padding: 20px;">
-                            <p style="color: #666; margin-bottom: 15px;">Bạn cần đăng nhập để gửi tin nhắn.</p>
-                            <a href="login.php" class="submit-btn" style="text-decoration: none; display: inline-block;">Đăng nhập ngay</a>
+                    <form id="contact-form" action="#" method="post">
+                        <div class="form-group">
+                            <label for="name">Họ và tên</label>
+                            <input type="text" id="name" name="name" placeholder="Nhập họ và tên của bạn" required>
                         </div>
-                    <?php endif; ?>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Nhập địa chỉ email của bạn" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Nhập số điện thoại của bạn" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Chủ đề</label>
+                            <input type="text" id="subject" name="subject" placeholder="Nhập chủ đề liên hệ" required>
+                        <div class="form-group">
+                            <label for="message">Nội dung</label>
+                            <textarea id="message" name="message" rows="5" placeholder="Nhập nội dung của bạn" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Gửi thông tin</button>
+                    </form>
                 </div>
             </div>
         </div>
     </main>
 
     <!-- Sửa lại cấu trúc popup -->
-    <div class="popup-overlay" id="successPopup" style="display: none;">
+    <div class="popup-overlay" id="successPopup">
         <div class="popup-content">
             <i class="fas fa-check-circle success-icon"></i>
             <h2>Gửi thông tin thành công!</h2>
             <p>Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ phản hồi sớm nhất có thể.</p>
-            <button type="button" class="close-btn" id="closePopupBtn">Đóng</button>
+            <button class="close-btn" onclick="closePopup()">Đóng</button>
         </div>
     </div>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Khởi tạo các biến
-            const successPopup = document.getElementById('successPopup');
-            const closePopupBtn = document.getElementById('closePopupBtn');
-            const contactForm = document.getElementById('contact-form');
-
-            // Hàm hiển thị popup
             function showPopup() {
-                if (successPopup) {
-                    successPopup.style.display = 'flex';
-                }
-            }
+            const popup = document.getElementById('successPopup');
+            popup.style.display = 'flex';
 
-            // Hàm đóng popup
             function closePopup() {
-                if (successPopup) {
-                    successPopup.style.display = 'none';
-                    if (contactForm) {
-                        contactForm.reset();
-                    }
+            const popup = document.getElementById('successPopup');
+            popup.style.display = 'none';
+            document.getElementById('contact-form').reset();
+        }
+        // Xử lý click outside
+        window.onclick = function(event) {
+            const popup = document.getElementById('successPopup');
+            if (event.target == popup) 
+            {
+                closePopup();
+            }
+        }
+        // Cập nhật event listener form submit
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            fetch('submit_contact.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showPopup();
+                } else {
+                    alert('Có lỗi xảy ra khi gửi form. Vui lòng thử lại sau.');
                 }
-            }
-
-            // Thêm event listener cho nút đóng popup
-            if (closePopupBtn) {
-                closePopupBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    closePopup();
-                });
-            }
-
-            // Xử lý form submit
-            if (contactForm) {
-                contactForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    <?php if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true): ?>
-                    window.location.href = 'login.php';
-                    return;
-                    <?php endif; ?>
-                    
-                    const formData = new FormData(this);
-
-                    fetch('submit_contact.php', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            showPopup();
-                        } else {
-                            alert('Có lỗi xảy ra khi gửi form. Vui lòng thử lại sau.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Có lỗi xảy ra khi gửi form. Vui lòng thử lại sau.');
-                    });
-                });
-            }
-
-            // Ngăn chặn sự kiện click từ popup content lan ra ngoài
-            const popupContent = document.querySelector('.popup-content');
-            if (popupContent) {
-                popupContent.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
-            }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra khi gửi form. Vui lòng thử lại sau.');
+            });
+        });
 
             // Khởi tạo bản đồ Leaflet
             const map = L.map('leaflet-map').setView([10.8575505, 106.7626846], 17); 
@@ -536,7 +468,6 @@ session_start();
             L.marker([10.8575505, 106.7626846]).addTo(map)
                 .bindPopup('DatSanHub<br>56 Đ. Hoàng Diệu 2, Thủ Đức, Hồ Chí Minh')
                 .openPopup();
-        });
     </script>
 <?php
     include 'footer.php';
