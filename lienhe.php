@@ -1,5 +1,5 @@
-<!DOCTYPE php>
-<php lang="vi">
+<!DOCTYPE html>
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +10,13 @@
     <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-dark: #388E3C;
+            --text-dark: #333;
+            --text-light: #666;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -51,12 +58,15 @@
     .working-hours h2, 
     .contact-form h2 {
         color: var(--text-dark);
-        border-bottom: 2px solid var(--primary-color);
+        border-bottom: 2px solid #4CAF50;
         padding-bottom: 10px;
+        margin-bottom: 20px;
         font-size: 1.5em;
     }
         .contact-info p, .working-hours p {
-            margin: 10px 0;
+            margin: 15px 0;
+            font-size: 16px;
+            line-height: 1.6;
         }
         .contact-info a {
         text-decoration: none;
@@ -71,19 +81,18 @@
     }
     .contact-form input,
     .contact-form textarea {
-        width: calc(100% - 24px);
+        width: 100%;
         padding: 12px;
         margin: 8px 0 20px;
         border: 1px solid #ddd;
         border-radius: 5px;
         font-size: 16px;
         transition: border-color 0.3s ease;
-        border-color: var(--primary-color);
     }
     .contact-form button {
         width: 100%;
         padding: 12px;
-        background-color: var(--primary-color);
+        background-color: #4CAF50;
         color: white;
         border: none;
         border-radius: 5px;
@@ -93,7 +102,7 @@
         transition: background-color 0.3s ease;
     }
     .contact-form button:hover {
-        background-color: var(--primary-dark);
+        background-color: #388E3C;
     }
     .working-hours {
         margin-bottom: 0;
@@ -112,13 +121,13 @@
         }
         .social-links a {
             margin-right: 15px;
-            color: var(--primary-color);
+            color: #4CAF50;
             text-decoration: none;
             font-size: 24px;
             transition: color 0.3s ease;
         }
         .social-links a:hover {
-            color: var(--primary-dark);
+            color: #388E3C;
         }
         .form-description {
             margin-bottom: 20px;
@@ -126,8 +135,8 @@
             color: #555;
         }
         .contact-form {
-        background-color: #fff;
-        padding: 20px;
+        background: white;
+        padding: 30px;
         border-radius: 10px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
@@ -212,7 +221,7 @@
     }
 
     .success-icon {
-        color: #2196F3;
+        color: #4CAF50;
         font-size: 50px;
         margin-bottom: 20px;
     }
@@ -229,7 +238,7 @@
     }
 
     .close-btn {
-        background-color: #2196F3;
+        background-color: #4CAF50;
         color: white;
         border: none;
         padding: 10px 30px;
@@ -240,7 +249,7 @@
     }
 
     .close-btn:hover {
-        background-color: #1976D2;
+        background-color: #388E3C;
     }
 
     <?php 
@@ -285,7 +294,7 @@
     }
 
     .contact-info-item i {
-        color: var(--primary-color);
+        color: #4CAF50;
         font-size: 32px;
         margin-bottom: 15px;
     }
@@ -302,7 +311,7 @@
     }
 
     .contact-info-item a:hover {
-        color: var(--primary-dark);
+        color: #388E3C;
     }
 
     .contact-form {
@@ -334,12 +343,12 @@
 
     .form-group input:focus,
     .form-group textarea:focus {
-        border-color: var(--primary-color);
+        border-color: #4CAF50;
         outline: none;
     }
 
     .submit-btn {
-        background-color: var(--primary-color);
+        background-color: #4CAF50;
         color: white;
         padding: 12px 30px;
         border: none;
@@ -351,7 +360,7 @@
     }
 
     .submit-btn:hover {
-        background-color: var(--primary-dark);
+        background-color: #388E3C;
     }
 
     /* Map container */
@@ -361,13 +370,107 @@
         overflow: hidden;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
+
+    .contact-info i.fas,
+    .contact-info i.fab,
+    .working-hours i.far {
+        width: 20px;
+        color: #4CAF50 !important;
+    }
+
+    .contact-info .fab.fa-facebook,
+    .contact-info .fab.fa-instagram {
+        color: #4CAF50 !important;
+    }
+
+    .contact-info a {
+        color: #4CAF50;
+        text-decoration: none;
+    }
+
+    .contact-info a:hover {
+        color: #388E3C;
+    }
+
+    .contact-form button,
+    .contact-form .submit-btn {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .contact-form button:hover,
+    .contact-form .submit-btn:hover {
+        background-color: #388E3C;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+        border-color: #4CAF50;
+    }
+
+    /* Thêm một class container mới cho phần contact */
+    .contact-section {
+        --contact-primary: #4CAF50;
+        --contact-dark: #388E3C;
+    }
+
+    /* Cập nhật tất cả các selector để sử dụng class mới */
+    .contact-section .contact-info i.fas,
+    .contact-section .contact-info i.fab,
+    .contact-section .working-hours i.far {
+        width: 20px;
+        color: var(--contact-primary) !important;
+    }
+
+    .contact-section .contact-info .fab.fa-facebook,
+    .contact-section .contact-info .fab.fa-instagram {
+        color: var(--contact-primary) !important;
+    }
+
+    .contact-section .contact-info a {
+        color: var(--contact-primary);
+        text-decoration: none;
+    }
+
+    .contact-section .contact-info a:hover {
+        color: var(--contact-dark);
+    }
+
+    .contact-section .contact-info {
+        --contact-primary: #4CAF50;
+        --contact-dark: #388E3C;
+    }
+
+    /* Chỉ áp dụng cho các icon và link trong phần contact-info của contact-section */
+    .contact-section .contact-info i.fas,
+    .contact-section .contact-info i.fab,
+    .contact-section .working-hours i.far {
+        width: 20px;
+        color: var(--contact-primary) !important;
+    }
+
+    /* Chỉ áp dụng cho các link trong phần contact-info */
+    .contact-section .contact-info p a {
+        color: var(--contact-primary);
+        text-decoration: none;
+    }
+
+    .contact-section .contact-info p a:hover {
+        color: var(--contact-dark);
+    }
+
+    /* Chỉ áp dụng cho social media icons trong contact-info */
+    .contact-section .contact-info .fab.fa-facebook,
+    .contact-section .contact-info .fab.fa-instagram {
+        color: var(--contact-primary) !important;
+    }
     </style>
 </head>
 <body>
 <?php
     include 'navbar.php';
     ?>
-    <div class="container">
+    <div class="container contact-section">
         <div class="header-section">
             <h1>liên hệ</h1>
         </div>
@@ -384,25 +487,25 @@
                 <div class="contact-info">
                     <h2>Thông tin liên hệ</h2>
                     <p>
-                        <i class="fas fa-map-marker-alt" style="width: 20px; color: #2196F3;"></i>
+                        <i class="fas fa-map-marker-alt" style="width: 20px; color: #4CAF50;"></i>
                         <strong>Địa chỉ:</strong> 56 Đ. Hoàng Diệu 2, Phường Linh Trung, Thủ Đức, Hồ Chí Minh, Vietnam
                     </p>
                     <p>
-                        <i class="fas fa-phone" style="width: 20px; color: #2196F3;"></i>
+                        <i class="fas fa-phone" style="width: 20px; color: #4CAF50;"></i>
                         <strong>Điện thoại:</strong> 0963 922 597
                     </p>
                     <p>
-                        <i class="fas fa-envelope" style="width: 20px; color: #2196F3;"></i>
+                        <i class="fas fa-envelope" style="width: 20px; color: #4CAF50;"></i>
                         <strong>Email:</strong> datsanhub@gmail.com
                     </p>
                     <p>
-                        <i class="fas fa-share-alt" style="width: 20px; color: #2196F3;"></i>
+                        <i class="fas fa-share-alt" style="width: 20px; color: #4CAF50;"></i>
                         <strong>Tìm chúng tôi:</strong>
                         <a href="https://facebook.com/datsanhub" target="_blank" title="Facebook" style="margin-left: 10px;">
-                            <i class="fab fa-facebook" style="color: #2196F3;"></i>
+                            <i class="fab fa-facebook" style="color: #4CAF50;"></i>
                         </a>
                         <a href="https://instagram.com/datsanhub" target="_blank" title="Instagram" style="margin-left: 10px;">
-                            <i class="fab fa-instagram" style="color: #2196F3;"></i>
+                            <i class="fab fa-instagram" style="color: #4CAF50;"></i>
                         </a>
                     </p>
                 </div>
@@ -410,11 +513,11 @@
                 <div class="working-hours">
                     <h2>Giờ làm việc</h2>
                     <p>
-                        <i class="far fa-clock" style="width: 20px; color: #2196F3;"></i>
+                        <i class="far fa-clock" style="width: 20px; color: #4CAF50;"></i>
                         <strong>Thứ 2 - Thứ 6:</strong> 7:00 AM - 8:00 PM
                     </p>
                     <p>
-                        <i class="far fa-clock" style="width: 20px; color: #2196F3;"></i>
+                        <i class="far fa-clock" style="width: 20px; color: #4CAF50;"></i>
                         <strong>Thứ 7 - Chủ nhật:</strong> 7:00 AM - 10:00 PM
                     </p>
                 </div>
