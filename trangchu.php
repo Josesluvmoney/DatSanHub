@@ -16,8 +16,8 @@ session_start();
             box-sizing: border-box;
         }
 <?php 
-        include 'assets/CSS/navbar.php';
-        include 'assets/CSS/footer.php';
+        include 'assets/CSS/navbar.css';
+        include 'assets/CSS/footer.css';
 ?>
 
         /* Hero Section */
