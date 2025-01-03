@@ -448,8 +448,8 @@
         .continue-btn:hover {
             background-color: #005a4f;
         }
-        <?php include 'Assets\CSS\navbar.php'; ?>
-        <?php include 'Assets\CSS\footer.php'; ?>
+        <?php include 'Assets\CSS\navbar.css'; ?>
+        <?php include 'Assets\CSS\footer.css'; ?>
     </style>
 </head>
 <body>

@@ -243,8 +243,8 @@
         background-color: #1976D2;
     }
 
-    <?php include 'Assets\CSS\navbar.php'; ?>
-    <?php include 'Assets\CSS\footer.php'; ?>
+    <?php include 'Assets\CSS\navbar.css'; ?>
+    <?php include 'Assets\CSS\footer.css'; ?>
     .contact-container {
         max-width: 1200px;
         margin: 40px auto;

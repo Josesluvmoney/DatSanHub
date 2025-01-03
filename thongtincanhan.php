@@ -191,8 +191,8 @@ if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             z-index: -1;
         }
 
-        <?php include 'Assets\CSS\navbar.php'; ?>
-        <?php include 'Assets\CSS\footer.php'; ?>
+        <?php include 'Assets\CSS\navbar.css'; ?>
+        <?php include 'Assets\CSS\footer.css'; ?>
     </style>
 </head>
 <body>
