@@ -168,8 +168,8 @@ session_start();
             background-color: #00695c;
         }
 
-        <?php include 'Assets\CSS\navbar.css'; ?>
-        <?php include 'Assets\CSS\footer.css'; ?>
+        <?php include 'assets\CSS\navbar.css'; ?>
+        <?php include 'assets\CSS\footer.css'; ?>
     </style>
 </head>
 <body>
