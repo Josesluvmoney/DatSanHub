@@ -406,7 +406,7 @@ session_start();
     </main>
 
     <!-- Sửa lại cấu trúc popup -->
-    <div class="popup-overlay" id="successPopup">
+    <div class="popup-overlay" id="successPopup" style="display: none;">
         <div class="popup-content">
             <i class="fas fa-check-circle success-icon"></i>
             <h2>Gửi thông tin thành công!</h2>
@@ -418,23 +418,40 @@ session_start();
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-            function showPopup() {
-            const popup = document.getElementById('successPopup');
-            popup.style.display = 'flex';
-
-            function closePopup() {
+        // Định nghĩa hàm closePopup ở ngoài
+        function closePopup() {
             const popup = document.getElementById('successPopup');
             popup.style.display = 'none';
             document.getElementById('contact-form').reset();
         }
+
+        function showPopup() {
+            const popup = document.getElementById('successPopup');
+            popup.style.display = 'flex';
+        }
+
         // Xử lý click outside
         window.onclick = function(event) {
             const popup = document.getElementById('successPopup');
-            if (event.target == popup) 
-            {
+            if (event.target == popup) {
                 closePopup();
             }
         }
+
+        // Khởi tạo bản đồ khi trang đã load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Khởi tạo bản đồ Leaflet
+            const map = L.map('leaflet-map').setView([10.8575505, 106.7626846], 17); 
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            L.marker([10.8575505, 106.7626846]).addTo(map)
+                .bindPopup('DatSanHub<br>56 Đ. Hoàng Diệu 2, Thủ Đức, Hồ Chí Minh')
+                .openPopup();
+        });
+
         // Cập nhật event listener form submit
         document.getElementById('contact-form').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -457,17 +474,6 @@ session_start();
                 alert('Có lỗi xảy ra khi gửi form. Vui lòng thử lại sau.');
             });
         });
-
-            // Khởi tạo bản đồ Leaflet
-            const map = L.map('leaflet-map').setView([10.8575505, 106.7626846], 17); 
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-
-            L.marker([10.8575505, 106.7626846]).addTo(map)
-                .bindPopup('DatSanHub<br>56 Đ. Hoàng Diệu 2, Thủ Đức, Hồ Chí Minh')
-                .openPopup();
     </script>
 <?php
     include 'footer.php';
