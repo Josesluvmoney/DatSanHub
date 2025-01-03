@@ -190,9 +190,10 @@ if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             position: absolute;
             z-index: -1;
         }
-
-        <?php include 'assets\CSS\navbar.css'; ?>
-        <?php include 'assets\CSS\footer.css'; ?>
+        <?php 
+        include 'assets/CSS/navbar.css';
+        include 'assets/CSS/footer.css';
+        ?>
     </style>
 </head>
 <body>

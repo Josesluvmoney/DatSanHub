@@ -107,9 +107,10 @@ session_start();
         .court:hover {
             background-color: #b2dfdb;
         }
-        <?php include 'assets\CSS\navbar.css'; ?>
-        <?php include 'assets\CSS\footer.css'; ?>
-        <?php include 'assets\CSS\navbar.css'; ?>
+        <?php 
+        include 'assets/CSS/navbar.css';
+        include 'assets/CSS/footer.css';
+        ?>
         body {
             min-height: 100vh;
             display: flex;
