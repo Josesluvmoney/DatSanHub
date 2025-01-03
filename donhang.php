@@ -510,10 +510,12 @@
             font-size: 24px;
             font-weight: bold;
         }
+
         <?php 
         include 'assets/CSS/navbar.css';
         include 'assets/CSS/footer.css';
         ?>
+
     </style>
 </head>
 <body>

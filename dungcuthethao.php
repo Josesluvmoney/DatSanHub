@@ -167,7 +167,6 @@ session_start();
         .rental .add-to-cart-btn:hover {
             background-color: #00695c;
         }
-
         <?php 
         include 'assets/CSS/navbar.css';
         include 'assets/CSS/footer.css';
