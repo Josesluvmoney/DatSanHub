@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="73cf4bb0-33ad-43b2-9084-9e6b168192eb" name="Changes" comment="thêm gitignore">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-    </list>
+    <list default="true" id="73cf4bb0-33ad-43b2-9084-9e6b168192eb" name="Changes" comment="thêm file vào gitignore" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,23 +17,23 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "nhathhao"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;nhathhao&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Josesluvmoney/DatSanHub.git",
-    "accountId": "6aa39519-e325-46b1-9da4-94fc1709c461"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Josesluvmoney/DatSanHub.git&quot;,
+    &quot;accountId&quot;: &quot;6aa39519-e325-46b1-9da4-94fc1709c461&quot;
   }
-}]]></component>
+}</component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP" />
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2r6uyuNCUI6VGva2pyRKZpEyyAk" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -44,6 +45,10 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "Nhật-Hào",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.lookFeel",
     "vue.rearranger.settings.migration": "true"
@@ -66,6 +71,7 @@
       <option name="presentableId" value="Default" />
       <updated>1735892104613</updated>
       <workItem from="1735892105972" duration="112000" />
+      <workItem from="1735892223697" duration="382000" />
     </task>
     <task id="LOCAL-00001" summary="thêm gitignore">
       <option name="closed" value="true" />
@@ -75,7 +81,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735892118929</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="thêm file vào gitignore">
+      <option name="closed" value="true" />
+      <created>1735892345900</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1735892345900</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -83,6 +97,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="thêm gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="thêm gitignore" />
+    <MESSAGE value="thêm file vào gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="thêm file vào gitignore" />
   </component>
 </project>
