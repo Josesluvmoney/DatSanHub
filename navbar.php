@@ -425,6 +425,61 @@
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
         });
+
+        document.querySelector('#loginPopup form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('login.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Đóng popup đăng nhập
+                    closePopup('loginPopup');
+                    
+                    // Hiển thị thông báo thành công
+                    showNotification(`
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3 style="color: #4CAF50;">Đăng nhập thành công!</h3>
+                        <p>Chào mừng bạn đã quay trở lại.</p>
+                    `);
+                    
+                    // Reload trang sau 1 giây
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    showNotification(`
+                        <div class="error-icon">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <h3 class="error-title">Đăng nhập không thành công</h3>
+                        <p>${data.message}</p>
+                        <div class="notification-buttons">
+                            <button class="retry-btn" onclick="closePopup('notificationPopup'); showPopup('loginPopup');">
+                                <i class="fas fa-redo"></i> Thử lại
+                            </button>
+                        </div>
+                    `);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification(`
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <h3 class="error-title">Lỗi</h3>
+                    <p>Có lỗi xảy ra. Vui lòng thử lại sau.</p>
+                `);
+            });
+        });
     </script>
 
     <style>
