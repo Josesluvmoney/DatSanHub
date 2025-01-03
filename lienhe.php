@@ -411,30 +411,30 @@ session_start();
             <i class="fas fa-check-circle success-icon"></i>
             <h2>Gửi thông tin thành công!</h2>
             <p>Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ phản hồi sớm nhất có thể.</p>
-            <button class="close-btn" onclick="closePopup()">Đóng</button>
+            <button class="close-btn" onclick="closeContactPopup()">Đóng</button>
         </div>
     </div>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Định nghĩa hàm closePopup ở ngoài
-        function closePopup() {
+        // Địi tên hàm để tránh xung đột
+        function closeContactPopup() {
             const popup = document.getElementById('successPopup');
             popup.style.display = 'none';
             document.getElementById('contact-form').reset();
         }
 
-        function showPopup() {
+        function showContactPopup() {
             const popup = document.getElementById('successPopup');
             popup.style.display = 'flex';
         }
 
-        // Xử lý click outside
+        // Xử lý click outside cho form liên hệ
         window.onclick = function(event) {
             const popup = document.getElementById('successPopup');
             if (event.target == popup) {
-                closePopup();
+                closeContactPopup();
             }
         }
 
@@ -452,7 +452,7 @@ session_start();
                 .openPopup();
         });
 
-        // Cập nhật event listener form submit
+        // Cập nhật event listener form submit cho form liên hệ
         document.getElementById('contact-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -464,7 +464,7 @@ session_start();
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    showPopup();
+                    showContactPopup();
                 } else {
                     alert('Có lỗi xảy ra khi gửi form. Vui lòng thử lại sau.');
                 }
