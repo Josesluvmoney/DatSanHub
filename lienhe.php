@@ -359,11 +359,19 @@ session_start();
                 <div class="working-hours">
                     <h2>Giờ làm việc</h2>
                     <p>
+<<<<<<< HEAD
                         <i class="far fa-clock" style="width: 20px; color: #4CAF50;"></i>
                         <strong>Thứ 2 - Thứ 6:</strong> 7:00 AM - 8:00 PM
                     </p>
                     <p>
                         <i class="far fa-clock" style="width: 20px; color: #4CAF50;"></i>
+=======
+                        <i class="far fa-clock" style="width: 20px; color: #2196F3;"></i>
+                        <strong>Thứ 2 - Thứ 6:</strong> 7:00 AM - 8:00 PM
+                    </p>
+                    <p>
+                        <i class="far fa-clock" style="width: 20px; color: #2196F3;"></i>
+>>>>>>> parent of e387808 (thay đổi phần Giờ làm việc)
                         <strong>Thứ 7 - Chủ nhật:</strong> 7:00 AM - 10:00 PM
                     </p>
                 </div>
