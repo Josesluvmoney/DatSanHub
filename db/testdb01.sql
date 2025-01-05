@@ -226,12 +226,12 @@ CREATE TABLE IF NOT EXISTS `tbl_san` (
 
 DROP TABLE IF EXISTS `tbl_user`;
 CREATE TABLE IF NOT EXISTS `tbl_user` (
-  `id_TK` int NOT NULL,
+  `id_TK` int NOT NULL AUTO_INCREMENT,
   `Fullname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Phone` int NOT NULL,
   `Password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `Role` tinyint(1) NOT NULL,
-  `Create_at` datetime NOT NULL,
+  `Role` tinyint(1) NOT NULL DEFAULT '0',
+  `Create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_TK`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 COMMIT;
