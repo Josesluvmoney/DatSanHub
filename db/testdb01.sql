@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 03, 2025 at 05:33 PM
+-- Generation Time: Jan 05, 2025 at 04:50 AM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -64,26 +64,176 @@ INSERT INTO `contact_messages` (`id`, `name`, `email`, `phone`, `subject`, `mess
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reg`
+-- Table structure for table `tbl_admin`
 --
 
-DROP TABLE IF EXISTS `reg`;
-CREATE TABLE IF NOT EXISTS `reg` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `fullname` varchar(255) COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `phone` varchar(20) COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `password` varchar(32) COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `phone` (`phone`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+DROP TABLE IF EXISTS `tbl_admin`;
+CREATE TABLE IF NOT EXISTS `tbl_admin` (
+  `id_NV` int NOT NULL,
+  `Fullname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Address` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Phone` int NOT NULL,
+  `Create_at` datetime DEFAULT NULL,
+  `Update_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_NV`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `reg`
+-- Table structure for table `tbl_chitiethoadon`
 --
 
-INSERT INTO `reg` (`id`, `fullname`, `phone`, `password`, `created_at`) VALUES
-(2, 'Huỳnh Tấn Dũng', '0963922597', 'c4ca4238a0b923820dcc509a6f75849b', '2025-01-03 17:27:32');
+DROP TABLE IF EXISTS `tbl_chitiethoadon`;
+CREATE TABLE IF NOT EXISTS `tbl_chitiethoadon` (
+  `id_ChitietHĐ` int NOT NULL,
+  `id_HĐ` int NOT NULL,
+  `id_DatSan` int NOT NULL,
+  `id_San` int NOT NULL,
+  `Created_bill` datetime NOT NULL,
+  `End_bill` datetime NOT NULL,
+  PRIMARY KEY (`id_ChitietHĐ`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_chitietlichdatsan`
+--
+
+DROP TABLE IF EXISTS `tbl_chitietlichdatsan`;
+CREATE TABLE IF NOT EXISTS `tbl_chitietlichdatsan` (
+  `id_LichDatSan` int NOT NULL,
+  `id_DatSan` int NOT NULL,
+  `id_San` int NOT NULL,
+  `id_KH` int NOT NULL,
+  `Created_at` datetime DEFAULT NULL,
+  `Time_start` time DEFAULT NULL,
+  `Time_end` time DEFAULT NULL,
+  `Status_paid` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id_LichDatSan`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_dichvu`
+--
+
+DROP TABLE IF EXISTS `tbl_dichvu`;
+CREATE TABLE IF NOT EXISTS `tbl_dichvu` (
+  `id_DV` int NOT NULL,
+  `Name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Price` double NOT NULL,
+  `TotalPrice` double NOT NULL,
+  `Paid_day` date NOT NULL,
+  PRIMARY KEY (`id_DV`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_hoadon`
+--
+
+DROP TABLE IF EXISTS `tbl_hoadon`;
+CREATE TABLE IF NOT EXISTS `tbl_hoadon` (
+  `id_HĐ` int NOT NULL,
+  `id_DatSan` int NOT NULL,
+  `Created_at` datetime DEFAULT NULL,
+  `Price` double NOT NULL,
+  `TotalPrice` double NOT NULL,
+  `Status_paid` tinyint(1) NOT NULL,
+  `Creator_bill` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  PRIMARY KEY (`id_HĐ`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_khachhang`
+--
+
+DROP TABLE IF EXISTS `tbl_khachhang`;
+CREATE TABLE IF NOT EXISTS `tbl_khachhang` (
+  `id_KH` int NOT NULL,
+  `Email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Fullname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Address` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Phone` int NOT NULL,
+  `Create_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id_KH`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_lichdatsan`
+--
+
+DROP TABLE IF EXISTS `tbl_lichdatsan`;
+CREATE TABLE IF NOT EXISTS `tbl_lichdatsan` (
+  `id_DatSan` int NOT NULL,
+  `id_San` int NOT NULL,
+  `id_KH` int NOT NULL,
+  `Created_at` datetime DEFAULT NULL,
+  `Time_start` time DEFAULT NULL,
+  `Time_end` time DEFAULT NULL,
+  PRIMARY KEY (`id_DatSan`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_loaidichvu`
+--
+
+DROP TABLE IF EXISTS `tbl_loaidichvu`;
+CREATE TABLE IF NOT EXISTS `tbl_loaidichvu` (
+  `id_LoaiDV` int NOT NULL,
+  `id_DV` int NOT NULL,
+  `Name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Price` double NOT NULL,
+  `Amount` int NOT NULL,
+  `TotalPrice` double NOT NULL,
+  PRIMARY KEY (`id_LoaiDV`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_san`
+--
+
+DROP TABLE IF EXISTS `tbl_san`;
+CREATE TABLE IF NOT EXISTS `tbl_san` (
+  `id_San` int NOT NULL,
+  `Name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Price` double NOT NULL,
+  `Status` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id_San`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_user`
+--
+
+DROP TABLE IF EXISTS `tbl_user`;
+CREATE TABLE IF NOT EXISTS `tbl_user` (
+  `id_TK` int NOT NULL,
+  `Fullname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Phone` int NOT NULL,
+  `Password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Role` tinyint(1) NOT NULL,
+  `Create_at` datetime NOT NULL,
+  PRIMARY KEY (`id_TK`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
