@@ -210,13 +210,28 @@ CREATE TABLE IF NOT EXISTS `tbl_loaidichvu` (
 
 DROP TABLE IF EXISTS `tbl_san`;
 CREATE TABLE IF NOT EXISTS `tbl_san` (
-  `id_San` int NOT NULL,
+  `id_San` int NOT NULL AUTO_INCREMENT,
   `Name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `Description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci,
   `Price` double NOT NULL,
-  `Status` tinyint(1) NOT NULL,
+  `Image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `Status` tinyint(1) NOT NULL DEFAULT '1',
+  `Opening_hours` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci DEFAULT '06:00 - 22:00',
+  `Created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `Updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_San`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+
+-- Thêm dữ liệu mẫu cho sân cầu lông
+INSERT INTO `tbl_san` (`Name`, `Type`, `Description`, `Price`, `Image`, `Status`, `Opening_hours`) VALUES
+('Sân Cầu Lông 1', 'badminton', 'Sân tiêu chuẩn quốc tế, mặt sân nhựa PU cao cấp', 150000, 'assets/images/courts/badminton1.jpg', 1, '06:00 - 22:00'),
+('Sân Cầu Lông 2', 'badminton', 'Sân trong nhà, có điều hòa, ánh sáng LED', 200000, 'assets/images/courts/badminton2.jpg', 1, '06:00 - 22:00'),
+('Sân Cầu Lông 3', 'badminton', 'Sân ngoài trời, có mái che, phù hợp buổi tối', 120000, 'assets/images/courts/badminton3.jpg', 0, '06:00 - 22:00'),
+('Sân Cầu Lông 4', 'badminton', 'Sân thi đấu, có khán đài, âm thanh hiện đại', 250000, 'assets/images/courts/badminton4.jpg', 1, '06:00 - 22:00'),
+('Sân Cầu Lông 5', 'badminton', 'Sân tập luyện, giá rẻ cho học sinh sinh viên', 100000, 'assets/images/courts/badminton5.jpg', 1, '06:00 - 22:00'),
+('Sân Cầu Lông 6', 'badminton', 'Sân đôi, phù hợp chơi đánh đôi', 180000, 'assets/images/courts/badminton6.jpg', 1, '06:00 - 22:00'),
+('Sân Cầu Lông 7', 'badminton', 'Sân VIP, có phòng thay đồ riêng', 300000, 'assets/images/courts/badminton7.jpg', 1, '06:00 - 22:00');
 
 -- --------------------------------------------------------
 
@@ -228,12 +243,13 @@ DROP TABLE IF EXISTS `tbl_user`;
 CREATE TABLE IF NOT EXISTS `tbl_user` (
   `id_TK` int NOT NULL AUTO_INCREMENT,
   `Fullname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `Phone` int NOT NULL,
+  `Phone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Role` tinyint(1) NOT NULL DEFAULT '0',
   `Create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_TK`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  PRIMARY KEY (`id_TK`),
+  UNIQUE KEY `Phone` (`Phone`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
