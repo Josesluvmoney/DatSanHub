@@ -56,7 +56,7 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
             border: 1px solid #ddd;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 200px;
+            width: 250px;
             padding: 20px;
             position: sticky;
             top: 20px;
@@ -65,36 +65,59 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
         }
 
         .sidebar h1 {
-            font-size: 18px;
+            font-size: 20px;
             color: #004d40;
-            margin-bottom: 10px;
-            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #004d40;
+            text-align: left;
         }
 
         .sport-select {
-            color: #004d40;
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
         .sport-option {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            color: #00796b;
-        }
-
-        .sport-option:last-child {
-            border-bottom: none;
+            color: #004d40;
+            border: 1px solid #e0f2f1;
+            font-size: 1em;
         }
 
         .sport-option:hover {
-            background-color: #f0f0f0;
+            background-color: #e0f2f1;
+        }
+
+        .sport-option.active {
+            background-color: #004d40;
+            color: white;
+            border-color: #004d40;
         }
 
         .sport-option span {
             color: #f9a825;
+            font-weight: 500;
+        }
+
+        .sport-option span {
+            background-color: #e0f2f1;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.9em;
+        }
+
+        .sport-option.active span {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
         }
 
         .main-content {
@@ -105,8 +128,7 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            min-height: 800px;
-            height: 100%;
+            min-height: 900px;
             position: relative;
             overflow-x: hidden;
         }
@@ -114,31 +136,52 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
         .sport-type {
             position: absolute;
             width: 100%;
-            height: 100%;
+            min-height: 900px;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            display: none;
             padding: 20px;
         }
 
         .sport-type.active {
             opacity: 1;
             visibility: visible;
+            display: block;
             position: relative;
         }
 
         .courts {
-            min-height: 600px;
+            min-height: 800px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            align-content: flex-start;
+            align-content: start;
             padding-bottom: 20px;
+            padding-right: 10px;
+            margin-bottom: 20px;
+        }
+
+        .courts::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .courts::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .courts::-webkit-scrollbar-thumb {
+            background: #004d40;
+            border-radius: 4px;
+        }
+
+        .courts::-webkit-scrollbar-thumb:hover {
+            background: #00695c;
         }
 
         .court {
             width: 100%;
-            height: 380px;
+            height: 400px;
             margin: 0;
             padding: 10px;
             background-color: #ffffff;
@@ -148,6 +191,7 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
             gap: 5px;
             transition: transform 0.2s;
             position: relative;
+            box-sizing: border-box;
         }
 
         .court:hover {
@@ -322,19 +366,20 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
         }
 
         .sport-type {
-            transform: translateX(100%);
-            transition: transform 0.3s ease, opacity 0.3s ease;
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
+            min-height: 900px;
+            opacity: 0;
+            visibility: hidden;
+            display: none;
+            padding: 20px;
         }
 
         .sport-type.active {
-            transform: translateX(0);
-            position: relative;
             opacity: 1;
             visibility: visible;
+            display: block;
+            position: relative;
         }
 
         .sidebar {
@@ -346,8 +391,22 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
 
         .sections-container {
             position: relative;
-            min-height: 800px;
+            min-height: 900px;
+            height: 100%;
             width: 100%;
+        }
+
+        .navbar {
+            position: relative;
+            z-index: 9999;
+        }
+
+        .notification-popup {
+            z-index: 9998;
+        }
+
+        .notification-overlay {
+            z-index: 9997;
         }
     </style>
 </head>
@@ -382,9 +441,9 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
 
         <div class="main-content">
             <div class="sections-container">
-                <section class="sport-type active" id="football">
-                    <h2>Bóng Đá</h2>
-                    <div class="courts">
+            <section class="sport-type active" id="football">
+                <h2>Bóng Đá</h2>
+                <div class="courts">
                         <?php if (!empty($footballCourts)): ?>
                             <?php foreach ($footballCourts as $court): ?>
                                 <div class="court" data-id="<?php echo $court['id_San']; ?>">
@@ -439,12 +498,12 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
                         <?php else: ?>
                             <p>Không có sân bóng đá nào.</p>
                         <?php endif; ?>
-                    </div>
-                </section>
+                </div>
+            </section>
 
-                <section class="sport-type" id="tennis">
-                    <h2>Tennis</h2>
-                    <div class="courts">
+            <section class="sport-type" id="tennis">
+                <h2>Tennis</h2>
+                <div class="courts">
                         <?php if (!empty($tennisCourts)): ?>
                             <?php foreach ($tennisCourts as $court): ?>
                                 <div class="court" data-id="<?php echo $court['id_San']; ?>">
@@ -499,12 +558,12 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
                         <?php else: ?>
                             <p>Không có sân tennis nào.</p>
                         <?php endif; ?>
-                    </div>
-                </section>
+                </div>
+            </section>
 
-                <section class="sport-type" id="pickleball">
-                    <h2>Pickleball</h2>
-                    <div class="courts">
+            <section class="sport-type" id="pickleball">
+                <h2>Pickleball</h2>
+                <div class="courts">
                         <?php if (!empty($pickleballCourts)): ?>
                             <?php foreach ($pickleballCourts as $court): ?>
                                 <div class="court" data-id="<?php echo $court['id_San']; ?>">
@@ -559,12 +618,12 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
                         <?php else: ?>
                             <p>Không có sân pickleball nào.</p>
                         <?php endif; ?>
-                    </div>
-                </section>
+                </div>
+            </section>
 
-                <section class="sport-type" id="volleyball">
-                    <h2>Bóng Chuyền</h2>
-                    <div class="courts">
+            <section class="sport-type" id="volleyball">
+                <h2>Bóng Chuyền</h2>
+                <div class="courts">
                         <?php if (!empty($volleyballCourts)): ?>
                             <?php foreach ($volleyballCourts as $court): ?>
                                 <div class="court" data-id="<?php echo $court['id_San']; ?>">
@@ -619,12 +678,12 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
                         <?php else: ?>
                             <p>Không có sân bóng chuyền nào.</p>
                         <?php endif; ?>
-                    </div>
-                </section>
+                </div>
+            </section>
 
-                <section class="sport-type" id="basketball">
-                    <h2>Bóng Rổ</h2>
-                    <div class="courts">
+            <section class="sport-type" id="basketball">
+                <h2>Bóng Rổ</h2>
+                <div class="courts">
                         <?php if (!empty($basketballCourts)): ?>
                             <?php foreach ($basketballCourts as $court): ?>
                                 <div class="court" data-id="<?php echo $court['id_San']; ?>">
@@ -679,12 +738,12 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
                         <?php else: ?>
                             <p>Không có sân bóng rổ nào.</p>
                         <?php endif; ?>
-                    </div>
-                </section>
+                </div>
+            </section>
 
-                <section class="sport-type" id="badminton">
-                    <h2>Cầu Lông</h2>
-                    <div class="courts">
+            <section class="sport-type" id="badminton">
+                <h2>Cầu Lông</h2>
+                <div class="courts">
                         <?php if (!empty($badmintonCourts)): ?>
                             <?php foreach ($badmintonCourts as $court): ?>
                                 <div class="court" data-id="<?php echo $court['id_San']; ?>">
@@ -739,8 +798,8 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
                         <?php else: ?>
                             <p>Không có sân cầu lông nào.</p>
                         <?php endif; ?>
-                    </div>
-                </section>
+                </div>
+            </section>
             </div>
         </div>
     </div>
@@ -748,15 +807,19 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
     <script>
         document.querySelectorAll('.sport-option').forEach(option => {
             option.addEventListener('click', function() {
+                document.querySelectorAll('.sport-option').forEach(o => {
+                    o.classList.remove('active');
+                });
+                
+                this.classList.add('active');
+                
                 const selectedSport = this.getAttribute('data-sport');
                 const sections = document.querySelectorAll('.sport-type');
                 
                 sections.forEach(section => {
                     if (section.id === selectedSport) {
-                        section.style.transform = 'translateX(0)';
                         section.classList.add('active');
                     } else {
-                        section.style.transform = 'translateX(100%)';
                         section.classList.remove('active');
                     }
                 });
