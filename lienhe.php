@@ -42,7 +42,8 @@ session_start();
             color: #4CAF50;
         }
         .map {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            margin-top: 0;
         }
         .content {
         display: flex;
@@ -79,8 +80,8 @@ session_start();
         #leaflet-map {
             width: 100%;
             height: 450px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+            border-radius: 0;
+            border: none;
         }
         .social-links a {
             margin-right: 15px;
@@ -113,7 +114,7 @@ session_start();
             background-image: url('images/photo_6314310101258846449_w.jpg');
             background-size: cover;
             background-position: center;
-            margin-bottom: 30px;
+            margin-bottom: 0;
         }
 
         .header-section h1 {
@@ -309,6 +310,10 @@ session_start();
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-section {
+            margin-top: 0;
         }
     </style>
 </head>
