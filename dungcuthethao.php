@@ -35,33 +35,36 @@ $pickleballEquipment = getEquipmentByType($conn, 'pickleball');
     <title>Dụng Cụ Thể Thao</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-<?php 
-        include 'assets/CSS/navbar.css';
-        include 'assets/CSS/footer.css';
-?>
+        /* Reset CSS toàn bộ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
         .container {
             padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
             display: flex;
             gap: 20px;
-            min-height: calc(100vh - 100px);
-            height: 100%;
-            position: relative;
-            z-index: 1;
+            flex: 1;
+            background-color: #f5f5f5;
         }
 
-        .sidebar {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 250px;
-            padding: 20px;
-            position: sticky;
-            top: 20px;
-            height: fit-content;
-            align-self: flex-start;
+        .navbar, .footer {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            background-color: #004d40;
         }
 
         .main-content {
@@ -72,8 +75,7 @@ $pickleballEquipment = getEquipmentByType($conn, 'pickleball');
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            min-height: 800px;
-            height: 100%;
+            min-height: 900px;
             position: relative;
             overflow-x: hidden;
         }
@@ -81,49 +83,47 @@ $pickleballEquipment = getEquipmentByType($conn, 'pickleball');
         .equipment-type {
             position: absolute;
             width: 100%;
-            height: 100%;
+            min-height: 800px;
             opacity: 0;
             visibility: hidden;
-            transform: translateX(100%);
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            display: none;
             padding: 20px;
         }
 
         .equipment-type.active {
             opacity: 1;
             visibility: visible;
+            display: block;
             position: relative;
-            transform: translateX(0);
         }
 
         .equipment-grid {
             min-height: 600px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            gap: 20px;
             align-content: flex-start;
             padding-bottom: 20px;
+            margin-top: 20px;
         }
 
         .equipment-card {
             width: 100%;
-            height: auto;
+            display: flex;
+            flex-direction: column;
             background-color: #ffffff;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border: none;
+            height: 100%;
         }
 
         .equipment-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            transform: none;
         }
 
         .equipment-image-container {
-            height: 220px;
-            position: relative;
+            height: 200px;
             width: 100%;
             overflow: hidden;
         }
@@ -132,55 +132,57 @@ $pickleballEquipment = getEquipmentByType($conn, 'pickleball');
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            transition: none;
         }
 
         .image-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1;
-        }
-
-        .equipment-card:hover .image-overlay {
-            opacity: 1;
+            display: none;
         }
 
         .equipment-card:hover .equipment-image {
-            transform: scale(1.1);
+            transform: none;
         }
 
         .equipment-content {
             padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .equipment-header {
             font-size: 1.1em;
             font-weight: 600;
             color: #2c3e50;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            height: 42px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
 
         .equipment-description {
             font-size: 0.9em;
             color: #666;
-            margin-bottom: 15px;
             line-height: 1.4;
+            height: 40px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 10px;
         }
 
         .equipment-info-grid {
+            margin-top: auto;
             display: flex;
             flex-direction: column;
             gap: 8px;
-            margin-bottom: 15px;
             background: #f8f9fa;
             padding: 12px;
             border-radius: 8px;
+            margin-bottom: 10px;
         }
 
         .equipment-quantity {
@@ -202,6 +204,8 @@ $pickleballEquipment = getEquipmentByType($conn, 'pickleball');
             font-weight: 600;
             font-size: 1em;
             color: #f57c00;
+            padding: 5px 0;
+            font-size: 0.95em;
         }
 
         .equipment-price i {
@@ -213,22 +217,20 @@ $pickleballEquipment = getEquipmentByType($conn, 'pickleball');
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            height: 45px;
         }
 
         .buy-button, .rent-button {
-            width: 100%;
-            height: 100%;
+            height: 36px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: 500;
-            font-size: 0.95em;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            transition: all 0.3s ease;
+            gap: 6px;
+            font-size: 0.9em;
+            transition: background-color 0.2s ease;
         }
 
         .buy-button {
@@ -237,29 +239,19 @@ $pickleballEquipment = getEquipmentByType($conn, 'pickleball');
         }
 
         .rent-button {
-            background-color: white;
-            color: #004d40;
-            border: 1px solid #004d40;
+            background-color: #00796b;
+            color: white;
         }
 
-        .buy-button:hover {
-            background-color: #00695c;
-        }
-
-        .rent-button:hover {
-            background-color: #e0f2f1;
-        }
-
-        .button-placeholder {
-            visibility: hidden;
+        .buy-button:hover, .rent-button:hover {
+            opacity: 0.9;
         }
 
         .button-disabled {
             background-color: #e0e0e0 !important;
             color: #9e9e9e !important;
             cursor: not-allowed !important;
-            border: none !important;
-            opacity: 0.5;
+            opacity: 0.5 !important;
         }
 
         @media (max-width: 1200px) {
@@ -312,6 +304,8 @@ $pickleballEquipment = getEquipmentByType($conn, 'pickleball');
             gap: 8px;
             font-size: 0.9em;
             padding: 8px 0;
+            padding: 5px 0;
+            font-size: 0.95em;
         }
 
         /* Style cho trạng thái có thể thuê */
@@ -332,10 +326,10 @@ $pickleballEquipment = getEquipmentByType($conn, 'pickleball');
 
         /* Style cho nút thuê bị vô hiệu hóa */
         .rent-button.not-for-rent {
-            background-color: #f5f5f5 !important;
-            color: #9e9e9e !important;
-            border: 1px dashed #9e9e9e !important;
-            cursor: not-allowed !important;
+            background-color: #f5f5f5;
+            color: #9e9e9e;
+            border: 1px dashed #9e9e9e;
+            cursor: not-allowed;
             opacity: 0.7;
         }
 
@@ -464,6 +458,77 @@ $pickleballEquipment = getEquipmentByType($conn, 'pickleball');
         body.popup-open {
             overflow: hidden;
         }
+
+        /* Điều chỉnh z-index cho navbar */
+        .navbar {
+            position: relative;
+            z-index: 9999; /* Đặt cao hơn notification-popup (9998) */
+        }
+
+        /* Cập nhật CSS cho sidebar */
+        .sidebar {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            padding: 20px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            align-self: flex-start;
+        }
+
+        .sidebar h2 {
+            font-size: 20px;
+            color: #004d40;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #004d40;
+        }
+
+        /* Cập nhật CSS cho category list */
+        .category-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .category-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #004d40;
+            border: 1px solid #e0f2f1;
+        }
+
+        .category-item:hover {
+            background-color: #e0f2f1;
+        }
+
+        .category-item.active {
+            background-color: #004d40;
+            color: white;
+            border-color: #004d40;
+        }
+
+        /* Điều chỉnh z-index cho notification */
+        .notification-popup {
+            z-index: 9998;
+        }
+
+        .notification-overlay {
+            z-index: 9997;
+        }
+        <?php 
+        include 'assets/CSS/navbar.css';
+        include 'assets/CSS/footer.css';
+        ?>
     </style>
 </head>
 <body>
@@ -597,6 +662,67 @@ $pickleballEquipment = getEquipmentByType($conn, 'pickleball');
     <?php include 'footer.php'; ?>
 
     <script>
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.category-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                
+                this.classList.add('active');
+                
+                const selectedType = this.getAttribute('data-type');
+                const sections = document.querySelectorAll('.equipment-type');
+                
+                sections.forEach(section => {
+                    if (selectedType === 'all' && section.id === 'football' || section.id === selectedType) {
+                        section.classList.add('active');
+                    } else {
+                        section.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        function showNotification(message) {
+            document.getElementById('notificationMessage').innerHTML = message;
+            document.getElementById('notificationOverlay').style.display = 'block';
+            document.getElementById('notificationPopup').style.display = 'block';
+            document.body.classList.add('popup-open');
+            
+            document.addEventListener('keydown', handleEscapeKey);
+            document.addEventListener('click', handleOutsideClick);
+        }
+
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+            document.getElementById('notificationOverlay').style.display = 'none';
+            document.body.classList.remove('popup-open');
+            
+            document.removeEventListener('keydown', handleEscapeKey);
+            document.removeEventListener('click', handleOutsideClick);
+        }
+
+        function handleEscapeKey(e) {
+            if (e.key === 'Escape') {
+                closePopup('notificationPopup');
+            }
+        }
+
+        function handleOutsideClick(e) {
+            const popup = document.getElementById('notificationPopup');
+            if (!popup.contains(e.target) && 
+                !e.target.classList.contains('buy-button') && 
+                !e.target.classList.contains('rent-button')) {
+                closePopup('notificationPopup');
+            }
+        }
+
+        document.getElementById('notificationOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePopup('notificationPopup');
+            }
+        });
+
         function handleEquipment(id, type) {
             <?php if (!isset($_SESSION['logged_in'])): ?>
                 showNotification(`
