@@ -10,7 +10,7 @@ if(isset($_POST['register'])) {
     $password = $_POST['password'];
 
     // Kiểm tra số điện thoại đã tồn tại chưa
-    $check_phone = "SELECT * FROM reg WHERE phone=?";
+    $check_phone = "SELECT * FROM tbl_user WHERE phone=?";
     $stmt = $conn->prepare($check_phone);
     $stmt->bind_param("s", $phone);
     $stmt->execute();
@@ -24,8 +24,9 @@ if(isset($_POST['register'])) {
         exit();
     }
 
-    // Thêm người dùng mới
-    $sql = "INSERT INTO `reg` (`fullname`, `phone`, `password`) VALUES (?, ?, ?)";
+    // Thêm người dùng mới với đầy đủ các trường bắt buộc
+    $sql = "INSERT INTO `tbl_user` (`fullname`, `phone`, `password`, `Role`, `Create_at`) 
+            VALUES (?, ?, ?, 0, NOW())";
     $stmt = $conn->prepare($sql);
     $hashed_password = md5($password);
     $stmt->bind_param("sss", $fullname, $phone, $hashed_password);
