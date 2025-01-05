@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone = $_POST['phone'];
     $password = md5($_POST['password']);
     
-    $sql = "SELECT * FROM reg WHERE phone = ? AND password = ?";
+    $sql = "SELECT * FROM tbl_user WHERE phone = ? AND password = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ss", $phone, $password);
     $stmt->execute();
