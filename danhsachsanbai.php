@@ -1,5 +1,30 @@
 <?php
 session_start();
+require_once 'config.php';
+
+// Lấy danh sách sân theo từng loại
+function getCourtsByType($conn, $type) {
+    $sql = "SELECT id_San, Name, Description, Price, Status, Opening_hours, 
+            CASE 
+                WHEN Image IS NOT NULL THEN CONCAT('data:image/jpeg;base64,', TO_BASE64(Image))
+                ELSE NULL 
+            END as ImageData 
+            FROM tbl_san WHERE Type = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $type);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
+
+// Lấy danh sách sân cầu lông
+$badmintonCourts = getCourtsByType($conn, 'badminton');
+$footballCourts = getCourtsByType($conn, 'football');
+$tennisCourts = getCourtsByType($conn, 'tennis');
+$pickleballCourts = getCourtsByType($conn, 'pickleball');
+$volleyballCourts = getCourtsByType($conn, 'volleyball');
+$basketballCourts = getCourtsByType($conn, 'basketball');
+
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -21,6 +46,9 @@ session_start();
             margin: 0 auto;
             display: flex;
             gap: 20px;
+            min-height: calc(100vh - 100px);
+            height: 100%;
+            position: relative;
         }
 
         .sidebar {
@@ -30,6 +58,10 @@ session_start();
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             width: 200px;
             padding: 20px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            align-self: flex-start;
         }
 
         .sidebar h1 {
@@ -73,40 +105,143 @@ session_start();
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             padding: 20px;
+            min-height: 800px;
+            height: 100%;
+            position: relative;
+            overflow-x: hidden;
         }
 
         .sport-type {
-            display: none;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            padding: 20px;
         }
 
         .sport-type.active {
-            display: block;
+            opacity: 1;
+            visibility: visible;
+            position: relative;
         }
 
         .courts {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            min-height: 400px;
+            min-height: 600px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            align-content: flex-start;
+            padding-bottom: 20px;
         }
 
         .court {
+            width: 100%;
+            height: 380px;
+            margin: 0;
+            padding: 10px;
             background-color: #ffffff;
             border: 1px solid #b2dfdb;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            width: calc(25% - 10px);
-            box-sizing: border-box;
-            min-height: 80px;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+            transition: transform 0.2s;
+            position: relative;
         }
 
         .court:hover {
-            background-color: #b2dfdb;
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
+
+        .court-header {
+            font-weight: bold;
+            color: #004d40;
+            font-size: 1em;
+            margin: 0;
+        }
+
+        .court-info {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .court-price {
+            color: #f9a825;
+            font-weight: bold;
+        }
+
+        .book-button {
+            width: 100%;
+            padding: 8px;
+            border-radius: 0 0 8px 8px;
+            margin: 0 -10px -10px -10px;
+            width: calc(100% + 20px);
+            background-color: #004d40;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+
+        .book-button:hover {
+            background-color: #00695c;
+        }
+
+        .book-button i {
+            font-size: 16px;
+        }
+
+        .court-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .court-image-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            z-index: 1;
+        }
+
+        .court-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .court:hover .court-image {
+            transform: scale(1.1);
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .court:hover .image-overlay {
+            opacity: 1;
+        }
+
         <?php 
         include 'assets/CSS/navbar.css';
         include 'assets/CSS/footer.css';
@@ -130,6 +265,90 @@ session_start();
         footer {
             margin-top: auto;
         }
+
+        .court-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .court-button-container {
+            width: 100%;
+            margin-top: auto;
+            padding: 0;
+        }
+
+        .court-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            margin: 0;
+        }
+
+        .court-time, .court-price {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+
+        .court-time {
+            color: #004d40;
+        }
+
+        .court-price {
+            color: #f9a825;
+            font-weight: bold;
+            justify-content: flex-end;
+        }
+
+        .court-time i {
+            color: #00796b;
+        }
+
+        .court-description {
+            font-size: 0.85em;
+            color: #666;
+            height: 35px;
+            margin: 0;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .sport-type {
+            transform: translateX(100%);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .sport-type.active {
+            transform: translateX(0);
+            position: relative;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            align-self: flex-start;
+        }
+
+        .sections-container {
+            position: relative;
+            min-height: 800px;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -140,74 +359,389 @@ session_start();
         <div class="sidebar">
             <h1>Danh Sách Sân Bãi</h1>
             <div class="sport-select">
-                <div class="sport-option" data-sport="football">Bóng Đá <span>4</span></div>
-                <div class="sport-option" data-sport="tennis">Tennis <span>4</span></div>
-                <div class="sport-option" data-sport="pickleball">Pickleball <span>4</span></div>
-                <div class="sport-option" data-sport="volleyball">Bóng Chuyền <span>2</span></div>
-                <div class="sport-option" data-sport="basketball">Bóng Rổ <span>2</span></div>
-                <div class="sport-option" data-sport="badminton">Cầu Lông <span>7</span></div>
+                <div class="sport-option" data-sport="football">
+                    Bóng Đá <span><?php echo count($footballCourts); ?></span>
+                </div>
+                <div class="sport-option" data-sport="tennis">
+                    Tennis <span><?php echo count($tennisCourts); ?></span>
+                </div>
+                <div class="sport-option" data-sport="pickleball">
+                    Pickleball <span><?php echo count($pickleballCourts); ?></span>
+                </div>
+                <div class="sport-option" data-sport="volleyball">
+                    Bóng Chuyền <span><?php echo count($volleyballCourts); ?></span>
+                </div>
+                <div class="sport-option" data-sport="basketball">
+                    Bóng Rổ <span><?php echo count($basketballCourts); ?></span>
+                </div>
+                <div class="sport-option" data-sport="badminton">
+                    Cầu Lông <span><?php echo count($badmintonCourts); ?></span>
+                </div>
             </div>
         </div>
 
         <div class="main-content">
-            <section class="sport-type active" id="football">
-                <h2>Bóng Đá</h2>
-                <div class="courts">
-                    <div class="court" data-id="football-1">Sân Bóng Đá 1</div>
-                    <div class="court" data-id="football-2">Sân Bóng Đá 2</div>
-                    <div class="court" data-id="football-3">Sân Bóng Đá 3</div>
-                    <div class="court" data-id="football-4">Sân Bóng Đá 4</div>
-                </div>
-            </section>
+            <div class="sections-container">
+                <section class="sport-type active" id="football">
+                    <h2>Bóng Đá</h2>
+                    <div class="courts">
+                        <?php if (!empty($footballCourts)): ?>
+                            <?php foreach ($footballCourts as $court): ?>
+                                <div class="court" data-id="<?php echo $court['id_San']; ?>">
+                                    <div class="court-content">
+                                        <div class="court-image-container">
+                                            <?php if ($court['ImageData']): ?>
+                                                <img src="<?php echo $court['ImageData']; ?>" 
+                                                     alt="<?php echo htmlspecialchars($court['Name']); ?>" 
+                                                     class="court-image">
+                                                <div class="image-overlay"></div>
+                                            <?php else: ?>
+                                                <img src="assets/images/courts/default.jpg" 
+                                                     alt="Default Image" 
+                                                     class="court-image">
+                                                <div class="image-overlay"></div>
+                                            <?php endif; ?>
+                                        </div>
+                                        
+                                        <div class="court-header">
+                                            <?php echo htmlspecialchars($court['Name']); ?>
+                                        </div>
+                                        
+                                        <div class="court-description">
+                                            <?php echo htmlspecialchars($court['Description']); ?>
+                                        </div>
+                                        
+                                        <div class="court-info-grid">
+                                            <div class="court-time">
+                                                <i class="far fa-clock"></i> 
+                                                <?php echo htmlspecialchars($court['Opening_hours']); ?>
+                                            </div>
+                                            <div class="court-price">
+                                                <i class="fas fa-tag"></i>
+                                                <?php echo number_format($court['Price'], 0, ',', '.'); ?> VNĐ/giờ
+                                            </div>
+                                        </div>
+                                    </div>
 
-            <section class="sport-type" id="tennis">
-                <h2>Tennis</h2>
-                <div class="courts">
-                    <div class="court" data-id="tennis-1">Sân Tennis 1</div>
-                    <div class="court" data-id="tennis-2">Sân Tennis 2</div>
-                    <div class="court" data-id="tennis-3">Sân Tennis 3</div>
-                    <div class="court" data-id="tennis-4">Sân Tennis 4</div>
-                </div>
-            </section>
+                                    <div class="court-button-container">
+                                        <?php if ($court['Status']): ?>
+                                            <button class="book-button" onclick="handleBooking(<?php echo $court['id_San']; ?>, '<?php echo htmlspecialchars($court['Name']); ?>')">
+                                                <i class="fas fa-calendar-plus"></i> Đặt sân
+                                            </button>
+                                        <?php else: ?>
+                                            <button class="book-button" disabled style="background-color: #ccc;">
+                                                <i class="fas fa-ban"></i> Đang được sử dụng
+                                            </button>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>Không có sân bóng đá nào.</p>
+                        <?php endif; ?>
+                    </div>
+                </section>
 
-            <section class="sport-type" id="pickleball">
-                <h2>Pickleball</h2>
-                <div class="courts">
-                    <div class="court" data-id="pickleball-1">Sân Pickleball 1</div>
-                    <div class="court" data-id="pickleball-2">Sân Pickleball 2</div>
-                    <div class="court" data-id="pickleball-3">Sân Pickleball 3</div>
-                    <div class="court" data-id="pickleball-4">Sân Pickleball 4</div>
-                </div>
-            </section>
+                <section class="sport-type" id="tennis">
+                    <h2>Tennis</h2>
+                    <div class="courts">
+                        <?php if (!empty($tennisCourts)): ?>
+                            <?php foreach ($tennisCourts as $court): ?>
+                                <div class="court" data-id="<?php echo $court['id_San']; ?>">
+                                    <div class="court-content">
+                                        <div class="court-image-container">
+                                            <?php if ($court['ImageData']): ?>
+                                                <img src="<?php echo $court['ImageData']; ?>" 
+                                                     alt="<?php echo htmlspecialchars($court['Name']); ?>" 
+                                                     class="court-image">
+                                                <div class="image-overlay"></div>
+                                            <?php else: ?>
+                                                <img src="assets/images/courts/default.jpg" 
+                                                     alt="Default Image" 
+                                                     class="court-image">
+                                                <div class="image-overlay"></div>
+                                            <?php endif; ?>
+                                        </div>
+                                        
+                                        <div class="court-header">
+                                            <?php echo htmlspecialchars($court['Name']); ?>
+                                        </div>
+                                        
+                                        <div class="court-description">
+                                            <?php echo htmlspecialchars($court['Description']); ?>
+                                        </div>
+                                        
+                                        <div class="court-info-grid">
+                                            <div class="court-time">
+                                                <i class="far fa-clock"></i> 
+                                                <?php echo htmlspecialchars($court['Opening_hours']); ?>
+                                            </div>
+                                            <div class="court-price">
+                                                <i class="fas fa-tag"></i>
+                                                <?php echo number_format($court['Price'], 0, ',', '.'); ?> VNĐ/giờ
+                                            </div>
+                                        </div>
+                                    </div>
 
-            <section class="sport-type" id="volleyball">
-                <h2>Bóng Chuyền</h2>
-                <div class="courts">
-                    <div class="court" data-id="volleyball-1">Sân Bóng Chuyền 1</div>
-                    <div class="court" data-id="volleyball-2">Sân Bóng Chuyền 2</div>
-                </div>
-            </section>
+                                    <div class="court-button-container">
+                                        <?php if ($court['Status']): ?>
+                                            <button class="book-button" onclick="handleBooking(<?php echo $court['id_San']; ?>, '<?php echo htmlspecialchars($court['Name']); ?>')">
+                                                <i class="fas fa-calendar-plus"></i> Đặt sân
+                                            </button>
+                                        <?php else: ?>
+                                            <button class="book-button" disabled style="background-color: #ccc;">
+                                                <i class="fas fa-ban"></i> Đang được sử dụng
+                                            </button>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>Không có sân tennis nào.</p>
+                        <?php endif; ?>
+                    </div>
+                </section>
 
-            <section class="sport-type" id="basketball">
-                <h2>Bóng Rổ</h2>
-                <div class="courts">
-                    <div class="court" data-id="basketball-1">Sân Bóng Rổ 1</div>
-                    <div class="court" data-id="basketball-2">Sân Bóng Rổ 2</div>
-                </div>
-            </section>
+                <section class="sport-type" id="pickleball">
+                    <h2>Pickleball</h2>
+                    <div class="courts">
+                        <?php if (!empty($pickleballCourts)): ?>
+                            <?php foreach ($pickleballCourts as $court): ?>
+                                <div class="court" data-id="<?php echo $court['id_San']; ?>">
+                                    <div class="court-content">
+                                        <div class="court-image-container">
+                                            <?php if ($court['ImageData']): ?>
+                                                <img src="<?php echo $court['ImageData']; ?>" 
+                                                     alt="<?php echo htmlspecialchars($court['Name']); ?>" 
+                                                     class="court-image">
+                                                <div class="image-overlay"></div>
+                                            <?php else: ?>
+                                                <img src="assets/images/courts/default.jpg" 
+                                                     alt="Default Image" 
+                                                     class="court-image">
+                                                <div class="image-overlay"></div>
+                                            <?php endif; ?>
+                                        </div>
+                                        
+                                        <div class="court-header">
+                                            <?php echo htmlspecialchars($court['Name']); ?>
+                                        </div>
+                                        
+                                        <div class="court-description">
+                                            <?php echo htmlspecialchars($court['Description']); ?>
+                                        </div>
+                                        
+                                        <div class="court-info-grid">
+                                            <div class="court-time">
+                                                <i class="far fa-clock"></i> 
+                                                <?php echo htmlspecialchars($court['Opening_hours']); ?>
+                                            </div>
+                                            <div class="court-price">
+                                                <i class="fas fa-tag"></i>
+                                                <?php echo number_format($court['Price'], 0, ',', '.'); ?> VNĐ/giờ
+                                            </div>
+                                        </div>
+                                    </div>
 
-            <section class="sport-type" id="badminton">
-                <h2>Cầu Lông</h2>
-                <div class="courts">
-                    <div class="court" data-id="badminton-1">Sân Cầu Lông 1</div>
-                    <div class="court" data-id="badminton-2">Sân Cầu Lông 2</div>
-                    <div class="court" data-id="badminton-3">Sân Cầu Lông 3</div>
-                    <div class="court" data-id="badminton-4">Sân Cầu Lông 4</div>
-                    <div class="court" data-id="badminton-5">Sân Cầu Lông 5</div>
-                    <div class="court" data-id="badminton-6">Sân Cầu Lông 6</div>
-                    <div class="court" data-id="badminton-7">Sân Cầu Lông 7</div>
-                </div>
-            </section>
+                                    <div class="court-button-container">
+                                        <?php if ($court['Status']): ?>
+                                            <button class="book-button" onclick="handleBooking(<?php echo $court['id_San']; ?>, '<?php echo htmlspecialchars($court['Name']); ?>')">
+                                                <i class="fas fa-calendar-plus"></i> Đặt sân
+                                            </button>
+                                        <?php else: ?>
+                                            <button class="book-button" disabled style="background-color: #ccc;">
+                                                <i class="fas fa-ban"></i> Đang được sử dụng
+                                            </button>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>Không có sân pickleball nào.</p>
+                        <?php endif; ?>
+                    </div>
+                </section>
+
+                <section class="sport-type" id="volleyball">
+                    <h2>Bóng Chuyền</h2>
+                    <div class="courts">
+                        <?php if (!empty($volleyballCourts)): ?>
+                            <?php foreach ($volleyballCourts as $court): ?>
+                                <div class="court" data-id="<?php echo $court['id_San']; ?>">
+                                    <div class="court-content">
+                                        <div class="court-image-container">
+                                            <?php if ($court['ImageData']): ?>
+                                                <img src="<?php echo $court['ImageData']; ?>" 
+                                                     alt="<?php echo htmlspecialchars($court['Name']); ?>" 
+                                                     class="court-image">
+                                                <div class="image-overlay"></div>
+                                            <?php else: ?>
+                                                <img src="assets/images/courts/default.jpg" 
+                                                     alt="Default Image" 
+                                                     class="court-image">
+                                                <div class="image-overlay"></div>
+                                            <?php endif; ?>
+                                        </div>
+                                        
+                                        <div class="court-header">
+                                            <?php echo htmlspecialchars($court['Name']); ?>
+                                        </div>
+                                        
+                                        <div class="court-description">
+                                            <?php echo htmlspecialchars($court['Description']); ?>
+                                        </div>
+                                        
+                                        <div class="court-info-grid">
+                                            <div class="court-time">
+                                                <i class="far fa-clock"></i> 
+                                                <?php echo htmlspecialchars($court['Opening_hours']); ?>
+                                            </div>
+                                            <div class="court-price">
+                                                <i class="fas fa-tag"></i>
+                                                <?php echo number_format($court['Price'], 0, ',', '.'); ?> VNĐ/giờ
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="court-button-container">
+                                        <?php if ($court['Status']): ?>
+                                            <button class="book-button" onclick="handleBooking(<?php echo $court['id_San']; ?>, '<?php echo htmlspecialchars($court['Name']); ?>')">
+                                                <i class="fas fa-calendar-plus"></i> Đặt sân
+                                            </button>
+                                        <?php else: ?>
+                                            <button class="book-button" disabled style="background-color: #ccc;">
+                                                <i class="fas fa-ban"></i> Đang được sử dụng
+                                            </button>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>Không có sân bóng chuyền nào.</p>
+                        <?php endif; ?>
+                    </div>
+                </section>
+
+                <section class="sport-type" id="basketball">
+                    <h2>Bóng Rổ</h2>
+                    <div class="courts">
+                        <?php if (!empty($basketballCourts)): ?>
+                            <?php foreach ($basketballCourts as $court): ?>
+                                <div class="court" data-id="<?php echo $court['id_San']; ?>">
+                                    <div class="court-content">
+                                        <div class="court-image-container">
+                                            <?php if ($court['ImageData']): ?>
+                                                <img src="<?php echo $court['ImageData']; ?>" 
+                                                     alt="<?php echo htmlspecialchars($court['Name']); ?>" 
+                                                     class="court-image">
+                                                <div class="image-overlay"></div>
+                                            <?php else: ?>
+                                                <img src="assets/images/courts/default.jpg" 
+                                                     alt="Default Image" 
+                                                     class="court-image">
+                                                <div class="image-overlay"></div>
+                                            <?php endif; ?>
+                                        </div>
+                                        
+                                        <div class="court-header">
+                                            <?php echo htmlspecialchars($court['Name']); ?>
+                                        </div>
+                                        
+                                        <div class="court-description">
+                                            <?php echo htmlspecialchars($court['Description']); ?>
+                                        </div>
+                                        
+                                        <div class="court-info-grid">
+                                            <div class="court-time">
+                                                <i class="far fa-clock"></i> 
+                                                <?php echo htmlspecialchars($court['Opening_hours']); ?>
+                                            </div>
+                                            <div class="court-price">
+                                                <i class="fas fa-tag"></i>
+                                                <?php echo number_format($court['Price'], 0, ',', '.'); ?> VNĐ/giờ
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="court-button-container">
+                                        <?php if ($court['Status']): ?>
+                                            <button class="book-button" onclick="handleBooking(<?php echo $court['id_San']; ?>, '<?php echo htmlspecialchars($court['Name']); ?>')">
+                                                <i class="fas fa-calendar-plus"></i> Đặt sân
+                                            </button>
+                                        <?php else: ?>
+                                            <button class="book-button" disabled style="background-color: #ccc;">
+                                                <i class="fas fa-ban"></i> Đang được sử dụng
+                                            </button>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>Không có sân bóng rổ nào.</p>
+                        <?php endif; ?>
+                    </div>
+                </section>
+
+                <section class="sport-type" id="badminton">
+                    <h2>Cầu Lông</h2>
+                    <div class="courts">
+                        <?php if (!empty($badmintonCourts)): ?>
+                            <?php foreach ($badmintonCourts as $court): ?>
+                                <div class="court" data-id="<?php echo $court['id_San']; ?>">
+                                    <div class="court-content">
+                                        <div class="court-image-container">
+                                            <?php if ($court['ImageData']): ?>
+                                                <img src="<?php echo $court['ImageData']; ?>" 
+                                                     alt="<?php echo htmlspecialchars($court['Name']); ?>" 
+                                                     class="court-image">
+                                                <div class="image-overlay"></div>
+                                            <?php else: ?>
+                                                <img src="assets/images/courts/default.jpg" 
+                                                     alt="Default Image" 
+                                                     class="court-image">
+                                                <div class="image-overlay"></div>
+                                            <?php endif; ?>
+                                        </div>
+                                        
+                                        <div class="court-header">
+                                            <?php echo htmlspecialchars($court['Name']); ?>
+                                        </div>
+                                        
+                                        <div class="court-description">
+                                            <?php echo htmlspecialchars($court['Description']); ?>
+                                        </div>
+                                        
+                                        <div class="court-info-grid">
+                                            <div class="court-time">
+                                                <i class="far fa-clock"></i> 
+                                                <?php echo htmlspecialchars($court['Opening_hours']); ?>
+                                            </div>
+                                            <div class="court-price">
+                                                <i class="fas fa-tag"></i>
+                                                <?php echo number_format($court['Price'], 0, ',', '.'); ?> VNĐ/giờ
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="court-button-container">
+                                        <?php if ($court['Status']): ?>
+                                            <button class="book-button" onclick="handleBooking(<?php echo $court['id_San']; ?>, '<?php echo htmlspecialchars($court['Name']); ?>')">
+                                                <i class="fas fa-calendar-plus"></i> Đặt sân
+                                            </button>
+                                        <?php else: ?>
+                                            <button class="book-button" disabled style="background-color: #ccc;">
+                                                <i class="fas fa-ban"></i> Đang được sử dụng
+                                            </button>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>Không có sân cầu lông nào.</p>
+                        <?php endif; ?>
+                    </div>
+                </section>
+            </div>
         </div>
     </div>
 
@@ -215,32 +749,49 @@ session_start();
         document.querySelectorAll('.sport-option').forEach(option => {
             option.addEventListener('click', function() {
                 const selectedSport = this.getAttribute('data-sport');
-                document.querySelectorAll('.sport-type').forEach(section => {
-                    section.classList.remove('active');
+                const sections = document.querySelectorAll('.sport-type');
+                
+                sections.forEach(section => {
+                    if (section.id === selectedSport) {
+                        section.style.transform = 'translateX(0)';
+                        section.classList.add('active');
+                    } else {
+                        section.style.transform = 'translateX(100%)';
+                        section.classList.remove('active');
+                    }
                 });
-                if (selectedSport) {
-                    document.getElementById(selectedSport).classList.add('active');
+            });
+        });
+
+        function handleBooking(courtId, courtName) {
+            <?php if (!isset($_SESSION['logged_in'])): ?>
+                showNotification(`
+                    <div class="warning-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3 style="color: #FF9800;">Yêu cầu đăng nhập</h3>
+                    <p>Vui lòng đăng nhập để đặt sân</p>
+                    <div class="notification-buttons">
+                        <button class="login-btn" onclick="closePopup('notificationPopup'); showPopup('loginPopup');">
+                            <i class="fas fa-sign-in-alt"></i> Đăng nhập ngay
+                        </button>
+                    </div>
+                `);
+            <?php else: ?>
+                window.location.href = `datsan.php?court_id=${courtId}`;
+            <?php endif; ?>
+        }
+
+        // Thêm style cho warning icon trong notification
+        document.head.insertAdjacentHTML('beforeend', `
+            <style>
+                #notificationMessage .warning-icon {
+                    color: #FF9800;
+                    font-size: 50px;
+                    margin-bottom: 15px;
                 }
-            });
-        });
-
-        document.querySelectorAll('.court').forEach(court => {
-            court.addEventListener('click', () => {
-                const courtId = court.getAttribute('data-id');
-                alert(`Bạn đã chọn ${court.textContent}`);
-                // Thêm logic đặt sân tại đây (ví dụ: gửi yêu cầu đến server)
-            });
-        });
-
-        // Copy toàn bộ JavaScript xử lý popup từ trangchu.php
-        function showPopup(popupId) {
-            // ...
-        }
-
-        function closePopup(popupId) {
-            // ...
-        }
-        // ... copy các hàm khác
+            </style>
+        `);
     </script>
 <?php
  include 'footer.php';
