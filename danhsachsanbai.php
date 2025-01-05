@@ -34,21 +34,41 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
     <title>Danh Sách Sân Bãi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Reset CSS */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
         .container {
             padding: 20px;
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 0;
+            width: 100%;
             display: flex;
             gap: 20px;
-            min-height: calc(100vh - 100px);
+            flex: 1;
             height: 100%;
             position: relative;
+        }
+
+        /* Điều chỉnh navbar và footer */
+        .navbar {
+            margin: 0;
+            width: 100%;
+        }
+
+        .footer {
+            margin: 0;
+            width: 100%;
         }
 
         .sidebar {
@@ -127,7 +147,7 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
             border: 1px solid #ddd;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            padding: 0;
             min-height: 900px;
             position: relative;
             overflow-x: hidden;
@@ -140,7 +160,7 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
             opacity: 0;
             visibility: hidden;
             display: none;
-            padding: 20px;
+            padding: 0;
         }
 
         .sport-type.active {
@@ -150,15 +170,19 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
             position: relative;
         }
 
+        .sport-type h2 {
+            padding: 20px;
+            margin: 0;
+            border-bottom: 1px solid #eee;
+        }
+
         .courts {
             min-height: 800px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             align-content: start;
-            padding-bottom: 20px;
-            padding-right: 10px;
-            margin-bottom: 20px;
+            padding: 15px;
         }
 
         .courts::-webkit-scrollbar {
@@ -855,6 +879,18 @@ $basketballCourts = getCourtsByType($conn, 'basketball');
                 }
             </style>
         `);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sport = urlParams.get('sport');
+            
+            if (sport) {
+                const sportOption = document.querySelector(`.sport-option[data-sport="${sport}"]`);
+                if (sportOption) {
+                    sportOption.click();
+                }
+            }
+        });
     </script>
 <?php
  include 'footer.php';
