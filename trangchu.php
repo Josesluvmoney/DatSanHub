@@ -413,17 +413,18 @@ session_start();
         <div class="hero-content">
             <h1>Đặt Sân Thể Thao Trực Tuyến</h1>
             <p>Tìm và đặt sân một cách dễ dàng, nhanh chóng</p>
-            <div class="hero-search">
-                <select>
-                    <option>Chọn môn thể thao</option>
-                    <option>Bóng đá</option>
-                    <option>Cầu lông</option>
-                    <option>Tennis</option>
-                    <option>Bóng rổ</option>
-                    <option>Pickleball</option>
+            <form class="hero-search" id="searchForm">
+                <select name="sport" id="sportSelect" required>
+                    <option value="">Chọn môn thể thao</option>
+                    <option value="Bóng đá">Bóng đá</option>
+                    <option value="Cầu lông">Cầu lông</option>
+                    <option value="Tennis">Tennis</option>
+                    <option value="Bóng rổ">Bóng rổ</option>
+                    <option value="Bóng chuyền">Bóng chuyền</option>
+                    <option value="Pickleball">Pickleball</option>
                 </select>
                 <div class="time-picker">
-                    <select class="hour-select">
+                    <select class="hour-select" required>
                         <option value="">Giờ</option>
                         <option value="06">06</option>
                         <option value="07">07</option>
@@ -443,7 +444,7 @@ session_start();
                         <option value="21">21</option>
                     </select>
                     <span class="time-separator">:</span>
-                    <select class="minute-select">
+                    <select class="minute-select" required>
                         <option value="">Phút</option>
                         <option value="00">00</option>
                         <option value="15">15</option>
@@ -451,8 +452,8 @@ session_start();
                         <option value="45">45</option>
                     </select>
                 </div>
-                <button>Tìm Sân</button>
-            </div>
+                <button type="submit">Tìm Sân</button>
+            </form>
         </div>
     </section>
 
@@ -486,5 +487,34 @@ session_start();
  <?php
  include 'footer.php';
  ?>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchForm = document.getElementById('searchForm');
+    const sportSelect = document.getElementById('sportSelect');
+    
+    searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const sportType = sportSelect.value;
+        
+        if (!sportType) {
+            alert("Vui lòng chọn môn thể thao");
+            return;
+        }
+
+        const sportMap = {
+            "Bóng đá": "football",
+            "Cầu lông": "badminton",
+            "Tennis": "tennis",
+            "Bóng rổ": "basketball",
+            "Bóng chuyền": "volleyball",
+            "Pickleball": "pickleball"
+        };
+
+        // Chuyển hướng tới trang danh sách sân
+        window.location.href = 'danhsachsanbai.php?sport=' + sportMap[sportType];
+    });
+});
+</script>
 </body>
     </html>
