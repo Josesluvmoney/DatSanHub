@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `tbl_san` (
   `Type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `Description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci,
   `Price` double NOT NULL,
-  `Image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `Image` MEDIUMBLOB,
   `Status` tinyint(1) NOT NULL DEFAULT '1',
   `Opening_hours` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_vietnamese_ci DEFAULT '06:00 - 22:00',
   `Created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -225,13 +225,49 @@ CREATE TABLE IF NOT EXISTS `tbl_san` (
 
 -- Thêm dữ liệu mẫu cho sân cầu lông
 INSERT INTO `tbl_san` (`Name`, `Type`, `Description`, `Price`, `Image`, `Status`, `Opening_hours`) VALUES
-('Sân Cầu Lông 1', 'badminton', 'Sân tiêu chuẩn quốc tế, mặt sân nhựa PU cao cấp', 150000, 'assets/images/courts/badminton1.jpg', 1, '06:00 - 22:00'),
-('Sân Cầu Lông 2', 'badminton', 'Sân trong nhà, có điều hòa, ánh sáng LED', 200000, 'assets/images/courts/badminton2.jpg', 1, '06:00 - 22:00'),
-('Sân Cầu Lông 3', 'badminton', 'Sân ngoài trời, có mái che, phù hợp buổi tối', 120000, 'assets/images/courts/badminton3.jpg', 0, '06:00 - 22:00'),
-('Sân Cầu Lông 4', 'badminton', 'Sân thi đấu, có khán đài, âm thanh hiện đại', 250000, 'assets/images/courts/badminton4.jpg', 1, '06:00 - 22:00'),
-('Sân Cầu Lông 5', 'badminton', 'Sân tập luyện, giá rẻ cho học sinh sinh viên', 100000, 'assets/images/courts/badminton5.jpg', 1, '06:00 - 22:00'),
-('Sân Cầu Lông 6', 'badminton', 'Sân đôi, phù hợp chơi đánh đôi', 180000, 'assets/images/courts/badminton6.jpg', 1, '06:00 - 22:00'),
-('Sân Cầu Lông 7', 'badminton', 'Sân VIP, có phòng thay đồ riêng', 300000, 'assets/images/courts/badminton7.jpg', 1, '06:00 - 22:00');
+('Sân Cầu Lông 1', 'badminton', 'Sân tiêu chuẩn quốc tế, mặt sân nhựa PU cao cấp', 150000, 'badminton1.jpg', 1, '06:00 - 22:00'),
+('Sân Cầu Lông 2', 'badminton', 'Sân trong nhà, có điều hòa, ánh sáng LED', 200000, 'badminton2.jpg', 1, '06:00 - 22:00'),
+('Sân Cầu Lông 3', 'badminton', 'Sân ngoài trời, có mái che, phù hợp buổi tối', 120000, 'badminton3.jpg', 0, '06:00 - 22:00'),
+('Sân Cầu Lông 4', 'badminton', 'Sân thi đấu, có khán đài, âm thanh hiện đại', 250000, 'badminton4.jpg', 1, '06:00 - 22:00'),
+('Sân Cầu Lông 5', 'badminton', 'Sân tập luyện, giá rẻ cho học sinh sinh viên', 100000, 'badminton5.jpg', 1, '06:00 - 22:00'),
+('Sân Cầu Lông 6', 'badminton', 'Sân đôi, phù hợp chơi đánh đôi', 180000, 'badminton6.jpg', 1, '06:00 - 22:00'),
+('Sân Cầu Lông 7', 'badminton', 'Sân VIP, có phòng thay đồ riêng', 300000, 'badminton7.jpg', 1, '06:00 - 22:00');
+
+-- Cập nhật dữ liệu mẫu cho sân cầu lông với đường dẫn hình ảnh
+UPDATE `tbl_san` SET 
+    `Image` = 'assets/images/courts/badminton1.jpg',
+    `Description` = 'Sân tiêu chuẩn quốc tế, mặt sân nhựa PU cao cấp'
+WHERE `Name` = 'Sân Cầu Lông 1';
+
+UPDATE `tbl_san` SET 
+    `Image` = 'assets/images/courts/badminton2.jpg',
+    `Description` = 'Sân trong nhà, có điều hòa, ánh sáng LED'
+WHERE `Name` = 'Sân Cầu Lông 2';
+
+UPDATE `tbl_san` SET 
+    `Image` = 'assets/images/courts/badminton3.jpg',
+    `Description` = 'Sân ngoài trời, có mái che, phù hợp buổi tối'
+WHERE `Name` = 'Sân Cầu Lông 3';
+
+UPDATE `tbl_san` SET 
+    `Image` = 'assets/images/courts/badminton4.jpg',
+    `Description` = 'Sân thi đấu, có khán đài, âm thanh hiện đại'
+WHERE `Name` = 'Sân Cầu Lông 4';
+
+UPDATE `tbl_san` SET 
+    `Image` = 'assets/images/courts/badminton5.jpg',
+    `Description` = 'Sân tập luyện, giá rẻ cho học sinh sinh viên'
+WHERE `Name` = 'Sân Cầu Lông 5';
+
+UPDATE `tbl_san` SET 
+    `Image` = 'assets/images/courts/badminton6.jpg',
+    `Description` = 'Sân đôi, phù hợp chơi đánh đôi'
+WHERE `Name` = 'Sân Cầu Lông 6';
+
+UPDATE `tbl_san` SET 
+    `Image` = 'assets/images/courts/badminton7.jpg',
+    `Description` = 'Sân VIP, có phòng thay đồ riêng'
+WHERE `Name` = 'Sân Cầu Lông 7';
 
 -- --------------------------------------------------------
 
@@ -255,3 +291,16 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- Thêm một stored procedure để insert ảnh
+DELIMITER //
+CREATE PROCEDURE InsertCourtImage(
+    IN court_name VARCHAR(50),
+    IN image_data MEDIUMBLOB
+)
+BEGIN
+    UPDATE tbl_san 
+    SET Image = image_data 
+    WHERE Name = court_name;
+END //
+DELIMITER ;
