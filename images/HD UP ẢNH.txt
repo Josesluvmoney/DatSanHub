@@ -1,0 +1,6 @@
+Hướng dẫn HOST up ảnh sân =)) 
+Thư mục sân: images/courts 
+Chuẩn bị ảnh các  đặt tên theo cấu trúc: type.jpg, dóng theo id của sân hoặc dụng cụ và type
+Ví dụ id_DungCu 3, type badminton thì đặt: badminton3.jpg
+Host truy cập vào http://localhost/DatSan/upload_image.php để upload ảnh.
+Kiểm tra trạng thái trong tbl_san.
