@@ -1,3 +1,8 @@
+<head>
+    <!-- Các thẻ meta và CSS khác -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
 <nav class="navbar">
         <a href="trangchu.php" class="logo">DatSanHub.com</a>
         
@@ -51,7 +56,7 @@
                         <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in']): ?>
                             <a href="thongtincanhan.php"><i class="fas fa-user-circle"></i>Thông tin cá nhân</a>
                             <a href="donhang.php"><i class="fas fa-shopping-bag"></i>Đơn hàng</a>
-                            <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a>
+                            <a href="#" data-action="logout"><i class="fas fa-sign-out-alt"></i>Đăng xuất</a>
                         <?php else: ?>
                             <a href="#" onclick="showPopup('loginPopup')"><i class="fas fa-sign-in-alt"></i>Đăng nhập</a>
                             <a href="#" onclick="showPopup('registerPopup')"><i class="fas fa-user-plus"></i>Đăng ký</a>
@@ -84,14 +89,17 @@
 
             <div class="divider">hoặc</div>
 
-            <form action="login.php" method="POST">
+            <form id="loginForm">
                 <div class="form-group">
                     <label for="phone">Số điện thoại</label>
                     <input type="tel" id="phone" name="phone" required placeholder="Nhập số điện thoại">
                 </div>
                 <div class="form-group">
                     <label for="password">Mật khẩu</label>
-                    <input type="password" id="password" name="password" required placeholder="Nhập mật khẩu">
+                    <div class="password-input-group">
+                        <input type="password" id="password" name="password" required placeholder="Nhập mật khẩu">
+                        <i class="fas fa-eye-slash toggle-password" onclick="togglePassword('password')"></i>
+                    </div>
                 </div>
                 <div class="forgot-password">
                     <a href="#" onclick="showPopup('forgotPasswordPopup'); closePopup('loginPopup')">Quên mật khẩu?</a>
@@ -133,7 +141,10 @@
                 </div>
                 <div class="form-group">
                     <label for="reg-password">Mật khẩu</label>
-                    <input type="password" id="reg-password" name="password" required placeholder="Nhập mật khẩu">
+                    <div class="password-input-group">
+                        <input type="password" id="reg-password" name="password" required placeholder="Nhập mật khẩu">
+                        <i class="fas fa-eye-slash toggle-password" onclick="togglePassword('reg-password')"></i>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Đăng Ký</button>
             </form>
@@ -480,6 +491,152 @@
                 });
             });
         }
+
+        $(document).ready(function() {
+            // Xử lý form đăng nhập
+            $('#loginForm').submit(function(e) {
+                e.preventDefault();
+                
+                $.ajax({
+                    type: 'POST',
+                    url: 'login.php',
+                    data: $(this).serialize(),
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            // Lưu token vào localStorage
+                            if(response.token) {
+                                localStorage.setItem('auth_token', response.token);
+                            }
+                            
+                            closePopup('loginPopup');
+                            showNotification(`
+                                <div class="success-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <h3 style="color: #4CAF50;">Đăng nhập thành công!</h3>
+                                <p>Chào mừng bạn đã quay trở lại.</p>
+                            `);
+                            
+                            // Reload trang sau 1 giây
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            showNotification(`
+                                <div class="error-icon">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                </div>
+                                <h3 class="error-title">Đăng nhập không thành công</h3>
+                                <p>${response.message}</p>
+                                <div class="notification-buttons">
+                                    <button class="retry-btn" onclick="closePopup('notificationPopup'); showPopup('loginPopup');">
+                                        <i class="fas fa-redo"></i> Thử lại
+                                    </button>
+                                </div>
+                            `);
+                        }
+                    },
+                    error: function() {
+                        showNotification(`
+                            <div class="error-icon">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <h3 class="error-title">Lỗi</h3>
+                            <p>Có lỗi xảy ra. Vui lòng thử lại sau.</p>
+                        `);
+                    }
+                });
+            });
+
+            // Thêm token vào mọi request AJAX
+            $.ajaxSetup({
+                beforeSend: function(xhr) {
+                    const token = localStorage.getItem('auth_token');
+                    if(token) {
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+                    }
+                }
+            });
+        });
+
+        // Hàm kiểm tra đăng nhập
+        function checkAuth() {
+            const token = localStorage.getItem('auth_token');
+            return token != null;
+        }
+
+        // Hàm đăng xuất
+        function logout() {
+            const logoutLink = document.querySelector('[data-action="logout"]');
+            if (logoutLink) {
+                logoutLink.click();
+            }
+        }
+
+        // Thêm hàm handleLogout vào phần script
+        function handleLogout(event) {
+            event.preventDefault();
+            
+            // Lưu URL hiện tại
+            const currentPage = window.location.href;
+            
+            $.ajax({
+                type: 'POST',
+                url: 'logout.php',
+                dataType: 'json',
+                success: function(response) {
+                    if(response.success) {
+                        localStorage.removeItem('auth_token');
+                        showNotification(`
+                            <div class="success-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h3 style="color: #4CAF50;">Đăng xuất thành công!</h3>
+                        `);
+                        
+                        setTimeout(() => {
+                            // Redirect về trang trước đó
+                            window.location.href = response.redirect_url;
+                        }, 1000);
+                    }
+                },
+                error: function() {
+                    showNotification(`
+                        <div class="error-icon">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <h3 class="error-title">Lỗi</h3>
+                        <p>Có lỗi xảy ra khi đăng xuất. Vui lòng thử lại.</p>
+                    `);
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            // Xử lý sự kiện logout
+            $(document).on('click', '[data-action="logout"]', function(e) {
+                e.preventDefault();
+                handleLogout(e);
+            });
+        });
+
+        function togglePassword(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = passwordInput.nextElementSibling;
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+                toggleIcon.classList.add('active');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+                toggleIcon.classList.remove('active');
+            }
+        }
     </script>
 
     <style>
@@ -564,5 +721,32 @@
         color: #F57C00;
         margin: 0 0 15px 0;
         font-size: 20px;
+    }
+
+    .password-input-group {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .password-input-group input {
+        width: 100%;
+        padding-right: 35px; /* Để chừa chỗ cho icon */
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 10px;
+        cursor: pointer;
+        color: #666;
+        transition: color 0.3s;
+    }
+
+    .toggle-password:hover {
+        color: #333;
+    }
+
+    .toggle-password.active {
+        color: #4CAF50;
     }
     </style>
