@@ -18,7 +18,11 @@ if (isset($_SESSION['logged_in']) && isset($_SESSION['user_id'])) {
             CASE 
                 WHEN gt.type = 'equipment' THEN dc.Image
                 WHEN gt.type = 'court' THEN s.Image
-            END AS Image
+            END AS Image,
+            gt.booking_date,
+            gt.start_time,
+            gt.end_time,
+            gt.duration
             FROM tbl_giohang_temp gt
             LEFT JOIN tbl_dungcu dc ON gt.type = 'equipment' AND gt.id_DungCu = dc.id_DungCu
             LEFT JOIN tbl_san s ON gt.type = 'court' AND gt.id_San = s.id_San
@@ -117,6 +121,18 @@ include 'assets/CSS/giohang.css';
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
+                <?php if ($item['type'] === 'court' && 
+                          isset($item['booking_date']) && 
+                          isset($item['start_time']) && 
+                          isset($item['duration'])): ?>
+                    <div class="booking-details">
+                        <p>Ngày đặt: <?php echo date('d/m/Y', strtotime($item['booking_date'])); ?></p>
+                        <p>Giờ bắt đầu: <?php echo date('H:i', strtotime($item['start_time'])); ?></p>
+                        <?php if (isset($item['end_time'])): ?>
+                            <p>Giờ kết thúc: <?php echo date('H:i', strtotime($item['end_time'])); ?></p>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
                 <?php endforeach; ?>
 
             <div class="cart-summary">
