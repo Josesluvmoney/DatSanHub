@@ -3,7 +3,7 @@ session_start();
 require_once 'config.php';
 // Lấy danh sách sân theo từng loại
 function getCourtsByType($conn, $type) {
-    $sql = "SELECT id_San, Name, Description, Price, Status, Opening_hours, 
+    $sql = "SELECT id_San, Name, Description, Price, Status, Opening_time, Closing_time, 
             CASE 
                 WHEN Image IS NOT NULL THEN CONCAT('data:image/jpeg;base64,', TO_BASE64(Image))
                 ELSE NULL 
@@ -100,7 +100,8 @@ include 'assets/CSS/danhsachsanbai.css';
                                         <div class="court-info-grid">
                                             <div class="court-time">
                                                 <i class="far fa-clock"></i> 
-                                                <?php echo htmlspecialchars($court['Opening_hours']); ?>
+                                                <?php echo htmlspecialchars($court['Opening_time']); ?> - 
+                                                <?php echo htmlspecialchars($court['Closing_time']); ?>
                                             </div>
                                             <div class="court-price">
                                                 <i class="fas fa-tag"></i>
@@ -115,7 +116,9 @@ include 'assets/CSS/danhsachsanbai.css';
                                                 <?php echo $court['id_San']; ?>,
                                                 '<?php echo htmlspecialchars($court['Name']); ?>',
                                                 <?php echo $court['Price']; ?>,
-                                                '<?php echo $court['ImageData']; ?>'
+                                                '<?php echo $court['ImageData'] ? 'has_image' : 'default'; ?>',
+                                                '<?php echo $court['Opening_time']; ?>',
+                                                '<?php echo $court['Closing_time']; ?>'
                                             )">
                                                 <i class="fas fa-calendar-plus"></i> Đặt sân
                                             </button>
@@ -164,7 +167,8 @@ include 'assets/CSS/danhsachsanbai.css';
                                         <div class="court-info-grid">
                                             <div class="court-time">
                                                 <i class="far fa-clock"></i> 
-                                                <?php echo htmlspecialchars($court['Opening_hours']); ?>
+                                                <?php echo htmlspecialchars($court['Opening_time']); ?> - 
+                                                <?php echo htmlspecialchars($court['Closing_time']); ?>
                                             </div>
                                             <div class="court-price">
                                                 <i class="fas fa-tag"></i>
@@ -179,7 +183,9 @@ include 'assets/CSS/danhsachsanbai.css';
                                                 <?php echo $court['id_San']; ?>,
                                                 '<?php echo htmlspecialchars($court['Name']); ?>',
                                                 <?php echo $court['Price']; ?>,
-                                                '<?php echo $court['ImageData']; ?>'
+                                                '<?php echo $court['ImageData'] ? 'has_image' : 'default'; ?>',
+                                                '<?php echo $court['Opening_time']; ?>',
+                                                '<?php echo $court['Closing_time']; ?>'
                                             )">
                                                 <i class="fas fa-calendar-plus"></i> Đặt sân
                                             </button>
@@ -227,7 +233,8 @@ include 'assets/CSS/danhsachsanbai.css';
                                         <div class="court-info-grid">
                                             <div class="court-time">
                                                 <i class="far fa-clock"></i> 
-                                                <?php echo htmlspecialchars($court['Opening_hours']); ?>
+                                                <?php echo htmlspecialchars($court['Opening_time']); ?> - 
+                                                <?php echo htmlspecialchars($court['Closing_time']); ?>
                                             </div>
                                             <div class="court-price">
                                                 <i class="fas fa-tag"></i>
@@ -241,7 +248,9 @@ include 'assets/CSS/danhsachsanbai.css';
                                                 <?php echo $court['id_San']; ?>,
                                                 '<?php echo htmlspecialchars($court['Name']); ?>',
                                                 <?php echo $court['Price']; ?>,
-                                                '<?php echo $court['ImageData']; ?>'
+                                                '<?php echo $court['ImageData'] ? 'has_image' : 'default'; ?>',
+                                                '<?php echo $court['Opening_time']; ?>',
+                                                '<?php echo $court['Closing_time']; ?>'
                                             )">
                                                 <i class="fas fa-calendar-plus"></i> Đặt sân
                                             </button>
@@ -289,7 +298,8 @@ include 'assets/CSS/danhsachsanbai.css';
                                         <div class="court-info-grid">
                                             <div class="court-time">
                                                 <i class="far fa-clock"></i> 
-                                                <?php echo htmlspecialchars($court['Opening_hours']); ?>
+                                                <?php echo htmlspecialchars($court['Opening_time']); ?> - 
+                                                <?php echo htmlspecialchars($court['Closing_time']); ?>
                                             </div>
                                             <div class="court-price">
                                                 <i class="fas fa-tag"></i>
@@ -304,7 +314,9 @@ include 'assets/CSS/danhsachsanbai.css';
                                                 <?php echo $court['id_San']; ?>,
                                                 '<?php echo htmlspecialchars($court['Name']); ?>',
                                                 <?php echo $court['Price']; ?>,
-                                                '<?php echo $court['ImageData']; ?>'
+                                                '<?php echo $court['ImageData'] ? 'has_image' : 'default'; ?>',
+                                                '<?php echo $court['Opening_time']; ?>',
+                                                '<?php echo $court['Closing_time']; ?>'
                                             )">
                                                 <i class="fas fa-calendar-plus"></i> Đặt sân
                                             </button>
@@ -353,7 +365,8 @@ include 'assets/CSS/danhsachsanbai.css';
                                         <div class="court-info-grid">
                                             <div class="court-time">
                                                 <i class="far fa-clock"></i> 
-                                                <?php echo htmlspecialchars($court['Opening_hours']); ?>
+                                                <?php echo htmlspecialchars($court['Opening_time']); ?> - 
+                                                <?php echo htmlspecialchars($court['Closing_time']); ?>
                                             </div>
                                             <div class="court-price">
                                                 <i class="fas fa-tag"></i>
@@ -368,7 +381,9 @@ include 'assets/CSS/danhsachsanbai.css';
                                                 <?php echo $court['id_San']; ?>,
                                                 '<?php echo htmlspecialchars($court['Name']); ?>',
                                                 <?php echo $court['Price']; ?>,
-                                                '<?php echo $court['ImageData']; ?>'
+                                                '<?php echo $court['ImageData'] ? 'has_image' : 'default'; ?>',
+                                                '<?php echo $court['Opening_time']; ?>',
+                                                '<?php echo $court['Closing_time']; ?>'
                                             )">
                                                 <i class="fas fa-calendar-plus"></i> Đặt sân
                                             </button>
@@ -417,7 +432,8 @@ include 'assets/CSS/danhsachsanbai.css';
                                         <div class="court-info-grid">
                                             <div class="court-time">
                                                 <i class="far fa-clock"></i> 
-                                                <?php echo htmlspecialchars($court['Opening_hours']); ?>
+                                                <?php echo htmlspecialchars($court['Opening_time']); ?> - 
+                                                <?php echo htmlspecialchars($court['Closing_time']); ?>
                                             </div>
                                             <div class="court-price">
                                                 <i class="fas fa-tag"></i>
@@ -432,7 +448,9 @@ include 'assets/CSS/danhsachsanbai.css';
                                                 <?php echo $court['id_San']; ?>,
                                                 '<?php echo htmlspecialchars($court['Name']); ?>',
                                                 <?php echo $court['Price']; ?>,
-                                                '<?php echo $court['ImageData']; ?>'
+                                                '<?php echo $court['ImageData'] ? 'has_image' : 'default'; ?>',
+                                                '<?php echo $court['Opening_time']; ?>',
+                                                '<?php echo $court['Closing_time']; ?>'
                                             )">
                                                 <i class="fas fa-calendar-plus"></i> Đặt sân
                                             </button>
@@ -452,89 +470,61 @@ include 'assets/CSS/danhsachsanbai.css';
             </div>
         </div>
     </div>
-    <script>
-        document.querySelectorAll('.sport-option').forEach(option => {
-            option.addEventListener('click', function() {
-                document.querySelectorAll('.sport-option').forEach(o => {
-                    o.classList.remove('active');
-                });
-                
-                this.classList.add('active');      
-                const selectedSport = this.getAttribute('data-sport');
-                const sections = document.querySelectorAll('.sport-type');
-                
-                sections.forEach(section => {
-                    if (section.id === selectedSport) {
-                        section.classList.add('active');
-                    } else {
-                        section.classList.remove('active');
-                    }
-                });
-            });
-        });
-        function handleBooking(courtId, courtName, price, image) {
-            <?php if (!isset($_SESSION['logged_in'])): ?>
-                showNotification(`
-                    <div class="warning-icon">
-                        <i class="fas fa-exclamation-triangle"></i>
+    <div class="notification-overlay" id="notificationOverlay"></div>
+    <div class="notification-popup" id="notificationPopup">
+        <button class="close-notification" onclick="closePopup('notificationPopup')">
+            <i class="fas fa-times"></i>
+        </button>
+        <div id="notificationMessage"></div>
+    </div>
+
+    <!-- Thêm modal chọn giờ -->
+    <div class="booking-modal" id="bookingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Chọn giờ đặt sân</h3>
+                <button class="close-modal" onclick="closeBookingModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="court-info-preview">
+                    <h4 id="selectedCourtName"></h4>
+                    <p id="selectedCourtPrice"></p>
+                </div>
+                <form id="bookingForm">
+                    <div class="form-group">
+                        <label>Ngày đặt:</label>
+                        <input type="date" id="bookingDate" required 
+                               min="<?php echo date('Y-m-d'); ?>">
                     </div>
-                    <h3>Yêu cầu đăng nhập</h3>
-                    <p>Vui lòng đăng nhập để đặt sân</p>
-                    <div class="notification-buttons">
-                        <button class="login-btn" onclick="closePopup('notificationPopup'); showPopup('loginPopup');">
-                            <i class="fas fa-sign-in-alt"></i> Đăng nhập ngay
-                        </button>
+                    <div class="form-group">
+                        <label>Giờ bắt đầu:</label>
+                        <input type="time" id="startTime" required>
                     </div>
-                `);
-            <?php else: ?>
-                // Tạo form ẩn để submit
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = 'xulygiohang.php';
-                
-                const fields = {
-                    'add_to_cart': '1',
-                    'id': courtId,
-                    'type': 'court',
-                    'name': courtName,
-                    'price': price,
-                    'image': image
-                };        
-                for (const [key, value] of Object.entries(fields)) {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = key;
-                    input.value = value;
-                    form.appendChild(input);
-                }
-                
-                document.body.appendChild(form);
-                form.submit();
-            <?php endif; ?>
-        }
-        document.head.insertAdjacentHTML('beforeend', `
-            <style>
-                #notificationMessage .warning-icon {
-                    color: #FF9800;
-                    font-size: 50px;
-                    margin-bottom: 15px;
-                }
-            </style>
-        `);
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const sport = urlParams.get('sport');
-            
-            if (sport) {
-                const sportOption = document.querySelector(`.sport-option[data-sport="${sport}"]`);
-                if (sportOption) {
-                    sportOption.click();
-                }
-            }
-        });
-    </script>
-<?php
- include 'footer.php';
- ?>
+                    <div class="form-group">
+                        <label>Số giờ thuê:</label>
+                        <select id="duration" required>
+                            <option value="1">1 giờ</option>
+                            <option value="2">2 giờ</option>
+                            <option value="3">3 giờ</option>
+                            <option value="4">4 giờ</option>
+                        </select>
+                    </div>
+                    <div class="total-preview">
+                        <span>Tổng tiền:</span>
+                        <span id="totalPrice">0 VNĐ</span>
+                    </div>
+                    <div class="button-group">
+                        <button type="button" onclick="closeBookingModal()">Hủy</button>
+                        <button type="submit">Xác nhận</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<?php include 'footer.php'; ?>
+<script>
+<?php include 'assets/js/danhsachsanbai.js'; ?>
+</script>
 </body>
 </html>
