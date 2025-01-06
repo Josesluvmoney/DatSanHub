@@ -12,25 +12,25 @@ function writeLog($message) {
 session_start();
 require_once 'config.php';
 
-// Kiểm tra đăng nhập
-if (!isset($_SESSION['logged_in'])) {
-    header('Location: login.php');
-    exit();
-}
-
-// Khởi tạo giỏ hàng nếu chưa có
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = array();
 }
 
-// Xử lý thêm vào giỏ hàng
 if (isset($_POST['add_to_cart'])) {
+    $response = array('success' => false);
+    
+    if (!isset($_SESSION['logged_in'])) {
+        $response['message'] = 'Vui lòng đăng nhập để thêm vào giỏ hàng';
+        echo json_encode($response);
+        exit;
+    }
+    
     $user_id = $_SESSION['user_id'];
     $item_id = $_POST['id'];
     $type = $_POST['type'];
     $name = $_POST['name'];
     $price = $_POST['price'];
-    $image = $_POST['image'];
+    $image_status = $_POST['image_status'];
     $action_type = isset($_POST['action_type']) ? $_POST['action_type'] : null;
 
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -67,15 +67,78 @@ if (isset($_POST['add_to_cart'])) {
         $update_stmt->execute();
     } else {
         // Thêm mới nếu chưa tồn tại
-        $insert_sql = "INSERT INTO tbl_giohang_temp 
-                      (id_TK, id_San, id_DungCu, type, action_type, name, price) 
-                      VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($insert_sql);
-        
         if ($type === 'court') {
-            $null_value = null;
-            $stmt->bind_param("iiisssd", $user_id, $item_id, $null_value, $type, $action_type, $name, $price);
+            $booking_date = $_POST['booking_date'];
+            $start_time = $_POST['start_time'];
+            $duration = (int)$_POST['duration'];
+            $end_time = date('H:i:s', strtotime($start_time . ' + ' . $duration . ' hours'));
+            
+            // Kiểm tra thời gian hoạt động của sân
+            $sql = "SELECT Opening_time, Closing_time FROM tbl_san WHERE id_San = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $item_id);
+            $stmt->execute();
+            $court_hours = $stmt->get_result()->fetch_assoc();
+            
+            if (strtotime($start_time) < strtotime($court_hours['Opening_time']) || 
+                strtotime($end_time) > strtotime($court_hours['Closing_time'])) {
+                $response['success'] = false;
+                $response['message'] = 'Thời gian đặt sân nằm ngoài giờ hoạt động';
+                echo json_encode($response);
+                exit;
+            }
+
+            // Kiểm tra xem sân đã được đặt chưa
+            $sql = "SELECT id_LichDatSan FROM tbl_chitietlichdatsan 
+                    WHERE id_San = ? AND booking_date = ? 
+                    AND ((start_time <= ? AND end_time > ?) 
+                    OR (start_time < ? AND end_time >= ?)
+                    OR (start_time >= ? AND end_time <= ?))
+                    AND payment_status != 'cancelled'";
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("isssssss", 
+                $item_id, 
+                $booking_date, 
+                $start_time, 
+                $start_time,
+                $end_time, 
+                $end_time,
+                $start_time,
+                $end_time
+            );
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $response['success'] = false;
+                $response['message'] = 'Sân đã được đặt trong khoảng thời gian này';
+                echo json_encode($response);
+                exit;
+            }
+
+            // Thêm vào giỏ hàng tạm
+            $insert_sql = "INSERT INTO tbl_giohang_temp 
+                          (id_TK, id_San, type, name, price, booking_date, start_time, duration, end_time) 
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($insert_sql);
+            $stmt->bind_param("iissdssss", 
+                $user_id, 
+                $item_id, 
+                $type, 
+                $name, 
+                $price,
+                $booking_date,
+                $start_time,
+                $duration,
+                $end_time
+            );
         } else {
+            $insert_sql = "INSERT INTO tbl_giohang_temp 
+                          (id_TK, id_San, id_DungCu, type, action_type, name, price) 
+                          VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($insert_sql);
+            
             $null_value = null;
             $stmt->bind_param("iiisssd", $user_id, $null_value, $item_id, $type, $action_type, $name, $price);
         }
@@ -84,8 +147,10 @@ if (isset($_POST['add_to_cart'])) {
     }
 
     $conn->close();
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
-    exit();
+    $response['success'] = true;
+    $response['cartCount'] = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+    echo json_encode($response);
+    exit;
 }
 
 // Xử lý cập nhật số lượng
@@ -178,63 +243,59 @@ if (isset($_POST['checkout'])) {
         writeLog("Cart data: " . print_r($cart_data, true));
 
         if (count($cart_data) > 0) {
+            // Thiết lập giá trị mặc định cho trạng thái
+            $order_status = 'pending';
+            $payment_status = $payment_method === 'banking' ? 'pending' : 'paid';
+
             foreach ($cart_data as $item) {
                 writeLog("Processing item: " . print_r($item, true));
                 
                 $total_price = $item['price'] * $item['quantity'];
                 
-                $sql = "INSERT INTO tbl_donhang (
-                    id_TK, 
-                    id_San, 
-                    id_DungCu, 
-                    type, 
-                    action_type,
-                    name,
-                    quantity, 
-                    price, 
-                    total_price, 
-                    payment_method,
-                    payment_status,
-                    order_status,
-                    receiver_name,
-                    phone,
-                    address,
-                    note
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                
-                $stmt = $conn->prepare($sql);
-                if (!$stmt) {
-                    writeLog("Prepare Error: " . $conn->error);
-                    throw new Exception("Lỗi chuẩn bị câu lệnh SQL");
-                }
-                
-                // Đặt trạng thái thanh toán và đơn hàng
-                if ($payment_method === 'banking') {
-                    $payment_status = 'pending'; // Chờ xác nhận thanh toán
-                    $order_status = 'pending';   // Chờ xác nhận đơn hàng
+                if ($item['type'] === 'court') {
+                    $insert_sql = "INSERT INTO tbl_donhang 
+                                  (id_TK, id_San, type, name, price, quantity, total_price, 
+                                   booking_date, start_time, end_time, duration,
+                                   payment_method, payment_status, order_status, created_at) 
+                                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                    $stmt = $conn->prepare($insert_sql);
+                    $stmt->bind_param("iissdddssssss", 
+                        $user_id,
+                        $item['id_San'],
+                        $item['type'],
+                        $item['name'],
+                        $item['price'],
+                        $item['quantity'],
+                        $total_price,
+                        $item['booking_date'],
+                        $item['start_time'],
+                        $item['end_time'],
+                        $item['duration'],
+                        $payment_method,
+                        $payment_status,
+                        $order_status
+                    );
                 } else {
-                    $payment_status = 'pending'; // COD
-                    $order_status = 'success';   // Đơn hàng được chấp nhận ngay
+                    $insert_sql = "INSERT INTO tbl_donhang 
+                                  (id_TK, id_San, id_DungCu, type, action_type, name, price, quantity, total_price, 
+                                   payment_method, payment_status, order_status, created_at) 
+                                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                    $stmt = $conn->prepare($insert_sql);
+                    $stmt->bind_param("iiisssddssss", 
+                        $user_id,
+                        $item['id_San'],
+                        $item['id_DungCu'],
+                        $item['type'],
+                        $item['action_type'],
+                        $item['name'],
+                        $item['price'],
+                        $item['quantity'],
+                        $total_price,
+                        $payment_method,
+                        $payment_status,
+                        $order_status
+                    );
                 }
-                
-                $stmt->bind_param("iiisssiidsssssss", 
-                    $user_id,
-                    $item['id_San'],
-                    $item['id_DungCu'],
-                    $item['type'],
-                    $item['action_type'],
-                    $item['name'],
-                    $item['quantity'],
-                    $item['price'],
-                    $total_price,
-                    $payment_method,
-                    $payment_status,
-                    $order_status,
-                    $receiver_name,
-                    $phone,
-                    $address,
-                    $note
-                );
                 
                 if (!$stmt->execute()) {
                     writeLog("Execute Error: " . $stmt->error);
