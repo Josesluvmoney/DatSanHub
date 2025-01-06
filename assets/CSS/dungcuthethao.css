@@ -355,6 +355,17 @@ footer {
             background: rgba(255, 255, 255, 0.5);
             cursor: not-allowed;
         }
+        .notification-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9997;
+            animation: fadeIn 0.2s ease;
+        }
         .notification-popup {
             display: none;
             position: fixed;
@@ -371,16 +382,21 @@ footer {
             text-align: center;
             animation: fadeIn 0.3s ease;
         }
-        .notification-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 9997;
-            animation: fadeIn 0.2s ease;
+        .close-notification {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #666;
+            cursor: pointer;
+            padding: 5px;
+            line-height: 1;
+            transition: color 0.3s ease;
+        }
+        .close-notification:hover {
+            color: #333;
         }
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -390,10 +406,7 @@ footer {
             margin: 15px 0;
         }
         .notification-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
+            display: none;
         }
         .login-btn {
             background: #004d40;
@@ -411,31 +424,11 @@ footer {
         .login-btn:hover {
             background: #00695c;
         }
+        .view-cart-btn,
+        .continue-btn,
+        .error-icon,
         .warning-icon {
-            color: #FF9800;
-            font-size: 50px;
-            margin-bottom: 15px;
-        }
-        .notification-title {
-            color: #FF9800;
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-        .close-notification {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 20px;
-            color: #666;
-            cursor: pointer;
-            padding: 5px;
-            line-height: 1;
-            transition: color 0.3s ease;
-        }
-        .close-notification:hover {
-            color: #333;
+            display: none;
         }
         body.popup-open {
             overflow: hidden;
@@ -466,3 +459,24 @@ footer {
         .buy-button i, .rent-button i {
             font-size: 1.1em;
         }
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .notification-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .notification-message {
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+    
