@@ -83,7 +83,6 @@ include 'assets/CSS/giohang.css';
                 <div class="product-info">
                     <img src="<?php 
                         if (isset($item['Image']) && $item['Image'] !== null) {
-                            // Chuyển đổi BLOB thành base64
                             echo 'data:image/jpeg;base64,' . base64_encode($item['Image']);
                         } else {
                             echo 'images/default.jpg';
@@ -96,7 +95,7 @@ include 'assets/CSS/giohang.css';
                         <p>
                             <?php 
                             if ($item['type'] === 'equipment') {
-                                echo $item['action_type'] === 'rent' ? 'Thuê' : 'Mua';
+                                echo $item['action_type'] === 'rent' ? 'Thuê 1h' : 'Mua';
                             } else {
                                 echo 'Đặt sân';
                             }
