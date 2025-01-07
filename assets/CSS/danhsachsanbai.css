@@ -24,7 +24,6 @@ body {
     position: relative;
 }
 
-/* Điều chỉnh navbar và footer */
 .navbar {
     margin: 0;
     width: 100%;
@@ -390,4 +389,156 @@ footer {
 
 .notification-overlay {
     z-index: 9997;
+}
+
+.success-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #4CAF50;
+}
+
+.notification-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #4CAF50;
+}
+
+.notification-message {
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.notification-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9997;
+    animation: fadeIn 0.2s ease;
+}
+
+.notification-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 9998;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.notification-buttons {
+    display: none;
+}
+
+.warning-icon,
+.error-icon {
+    display: none;
+}
+
+.booking-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.total-preview {
+    margin: 20px 0;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.button-group button {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button-group button[type="submit"] {
+    background: #004d40;
+    color: white;
+}
+
+.button-group button[type="button"] {
+    background: #ccc;
+    color: #333;
 }

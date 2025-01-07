@@ -1,5 +1,5 @@
 .navbar {
-            background-color: #00796b; /* Thay đổi màu theo theme */
+            background-color: #00796b; 
             padding: 10px 50px;
             display: flex;
             align-items: center;
@@ -382,9 +382,116 @@
             font-size: 14px;
             line-height: 1.6;
         }
-
-        /* Style for the phone number display */
         #displayPhone {
             font-weight: bold;
             color: #00796b;
+        }
+        #notificationPopup .popup-container {
+            min-width: 350px;
+            text-align: center;
+            padding: 30px;
+            border-radius: 10px;
+            background: #fff;
+        }
+    
+        #notificationMessage {
+            margin: 20px 0;
+        }
+    
+        #notificationMessage h3 {
+            margin: 0 0 15px 0;
+            font-size: 20px;
+        }
+    
+        #notificationMessage p {
+            color: #666;
+            margin: 10px 0 20px 0;
+            font-size: 16px;
+        }
+    
+        #notificationMessage .success-icon {
+            color: #4CAF50;
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+    
+        #notificationMessage .error-icon {
+            color: #FF9800;
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+    
+        #notificationMessage .notification-buttons {
+            margin-top: 20px;
+        }
+    
+        #notificationMessage .login-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+    
+        #notificationMessage .login-btn:hover {
+            background: #45a049;
+        }
+    
+        #notificationMessage .retry-btn {
+            background: #FF9800;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+    
+        #notificationMessage .retry-btn:hover {
+            background: #F57C00;
+        }
+    
+        #notificationMessage .notification-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+    
+        #notificationMessage h3.error-title {
+            color: #F57C00;
+            margin: 0 0 15px 0;
+            font-size: 20px;
+        }
+    
+        .password-input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+    
+        .password-input-group input {
+            width: 100%;
+            padding-right: 35px;
+        }
+    
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+    
+        .toggle-password:hover {
+            color: #333;
+        }
+    
+        .toggle-password.active {
+            color: #4CAF50;
         }
