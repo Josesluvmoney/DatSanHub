@@ -403,7 +403,7 @@ include 'assets/CSS/giohang.css';
                     <h3>Thông tin giao hàng</h3>
                     <div class="form-group">
                         <label>Họ tên người nhận:</label>
-                        <input type="text" name="receiver_name" required value="<?php echo $_SESSION['fullname']; ?>">
+                        <input type="text" name="receiver_name" required value="<?php echo $_SESSION['Fullname']; ?>">
                     </div>
                     <div class="form-group">
                         <label>Số điện thoại:</label>

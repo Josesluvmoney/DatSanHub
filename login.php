@@ -2,8 +2,6 @@
 session_start();
 require 'config.php';
 
-header('Content-Type: application/json');
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone = trim($_POST['phone']);
     $password = trim($_POST['password']);
@@ -13,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validate input
     if(empty($phone) || empty($password)) {
+        header('Content-Type: application/json');
         echo json_encode([
             'success' => false,
             'message' => 'Vui lòng điền đầy đủ thông tin'
@@ -42,24 +41,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result->num_rows > 0) {
             $user = $result->fetch_assoc();
             if(md5($password) === $user['Password']) {
-                // Tạo session token ngẫu nhiên
-                $token = bin2hex(random_bytes(32));
-                $_SESSION['token'] = $token;
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user_id'] = $user['id_TK'];
-                $_SESSION['fullname'] = $user['Fullname'];
-                $_SESSION['phone'] = $user['Phone'];
-                
+                $_SESSION['user_name'] = $user['Fullname'];
+                $_SESSION['Fullname'] = $user['Fullname'];
+                $_SESSION['is_admin'] = ($user['Role'] == 1);
+
+                // Nếu là admin, chuyển hướng ngay lập tức
+                if ($user['Role'] == 1) {
+                    header('Location: admin.php');
+                    exit;
+                }
+
+                // Nếu là user thường, trả về JSON response
+                header('Content-Type: application/json');
                 echo json_encode([
                     'success' => true,
                     'message' => 'Đăng nhập thành công',
-                    'token' => $token
+                    'redirect' => 'trangchu.php'
                 ]);
                 exit;
             }
         }
         
         // Trường hợp đăng nhập thất bại
+        header('Content-Type: application/json');
         echo json_encode([
             'success' => false,
             'message' => 'Số điện thoại hoặc mật khẩu không chính xác'
@@ -67,6 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
     } catch (Exception $e) {
         error_log("Login error: " . $e->getMessage());
+        header('Content-Type: application/json');
         echo json_encode([
             'success' => false,
             'message' => 'Đăng nhập thất bại, vui lòng thử lại sau'
@@ -77,6 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Nếu không phải POST request
 http_response_code(403);
+header('Content-Type: application/json');
 echo json_encode([
     'success' => false,
     'message' => 'Phương thức không được phép'
