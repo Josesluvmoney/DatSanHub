@@ -1,279 +1,176 @@
 <?php
 session_start();
-// Kiểm tra đăng nhập
-if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header("Location: trangchu.php");
-    exit();
+require_once 'config.php';
+
+if (!isset($_SESSION['logged_in'])) {
+    header('Location: login.php');
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
+$message = '';
+$messageType = '';
+
+try {
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    if ($conn->connect_error) {
+        throw new Exception("Connection failed: " . $conn->connect_error);
+    }
+
+    // Xử lý form submit
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $fullname = trim($_POST['fullname']);
+        $phone = trim($_POST['phone']);
+        $current_password = $_POST['current_password'];
+        $new_password = $_POST['new_password'];
+        $confirm_password = $_POST['confirm_password'];
+
+        // Lấy thông tin người dùng hiện tại
+        $stmt = $conn->prepare("SELECT * FROM tbl_user WHERE id_TK = ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $user = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        $can_update = true;
+        $should_update_password = false;
+
+        // Kiểm tra số điện thoại trùng
+        if ($phone !== $user['Phone']) {
+            $stmt = $conn->prepare("SELECT id_TK FROM tbl_user WHERE Phone = ? AND id_TK != ?");
+            $stmt->bind_param("si", $phone, $user_id);
+            $stmt->execute();
+            if ($stmt->get_result()->num_rows > 0) {
+                $message = "Số điện thoại đã được sử dụng!";
+                $messageType = "error";
+                $can_update = false;
+            }
+            $stmt->close();
+        }
+
+        // Kiểm tra mật khẩu nếu có nhập
+        if (!empty($current_password)) {
+            if (md5($current_password) !== $user['Password']) {
+                $message = "Mật khẩu hiện tại không đúng!";
+                $messageType = "error";
+                $can_update = false;
+            } elseif ($new_password !== $confirm_password) {
+                $message = "Mật khẩu mới không khớp!";
+                $messageType = "error";
+                $can_update = false;
+            } else {
+                $should_update_password = true;
+            }
+        }
+
+        // Thực hiện cập nhật nếu không có lỗi
+        if ($can_update) {
+            if ($should_update_password) {
+                $new_password_hash = md5($new_password);
+                $stmt = $conn->prepare("UPDATE tbl_user SET Fullname = ?, Phone = ?, Password = ? WHERE id_TK = ?");
+                $stmt->bind_param("sssi", $fullname, $phone, $new_password_hash, $user_id);
+            } else {
+                $stmt = $conn->prepare("UPDATE tbl_user SET Fullname = ?, Phone = ? WHERE id_TK = ?");
+                $stmt->bind_param("ssi", $fullname, $phone, $user_id);
+            }
+
+            if ($stmt->execute()) {
+                $message = "Cập nhật thông tin thành công!";
+                $messageType = "success";
+            } else {
+                $message = "Có lỗi xảy ra, vui lòng thử lại!";
+                $messageType = "error";
+            }
+            $stmt->close();
+        }
+    }
+
+    // Lấy thông tin người dùng mới nhất để hiển thị
+    $stmt = $conn->prepare("SELECT * FROM tbl_user WHERE id_TK = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $user = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+
+} catch (Exception $e) {
+    $message = "Có lỗi xảy ra: " . $e->getMessage();
+    $messageType = "error";
+} finally {
+    if (isset($conn)) {
+        $conn->close();
+    }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thông Tin Cá Nhân</title>
+    <title>Thông tin cá nhân</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: #f4f4f4;
-        }
-
-        .profile-container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            margin-top: 80px;
-        }
-
-        .profile-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .profile-header h1 {
-            color: #333;
-            margin-bottom: 1rem;
-        }
-
-        .profile-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            margin: 0 auto 1rem;
-            display: block;
-            border: 3px solid #ffd700;
-        }
-
-        .profile-info {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .info-label {
-            font-weight: bold;
-            color: #555;
-        }
-
-        .info-content {
-            color: #333;
-        }
-
-        .profile-section {
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .profile-section h2 {
-            color: #333;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        .edit-button {
-            background-color: #ffd700;
-            color: #333;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            display: block;
-            margin: 2rem auto 0;
-        }
-
-        .edit-button:hover {
-            background-color: #ffed4a;
-        }
-
-        @media (max-width: 768px) {
-            .profile-info {
-                grid-template-columns: 1fr;
-            }
-            
-            .profile-container {
-                margin: 1rem;
-                padding: 1rem;
-            }
-        }
-        /* CSS cho search box và user actions */
-        .search-box {
-            display: flex;
-            align-items: center;
-            background-color: white;
-            border-radius: 4px;
-            padding: 5px 10px;
-            width: 300px;
-        }
-
-        .search-box input {
-            border: none;
-            outline: none;
-            width: 100%;
-            padding: 5px;
-        }
-
-        .search-box button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #004d40;
-        }
-
-        .user-actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .account-btn, .cart-btn {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            position: relative;
-        }
-
-        .avatar-container {
-            position: relative;
-            width: 200px;
-            margin: 0 auto 1rem;
-            text-align: center;
-        }
-
-        .profile-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            display: block;
-            border: 3px solid #ffd700;
-            margin: 0 auto;
-        }
-
-        .change-avatar-btn {
-            display: inline-block;
-            background-color: #00796b;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 10px;
-            transition: background-color 0.3s;
-            white-space: nowrap;
-            width: 200px;
-        }
-
-        .change-avatar-btn:hover {
-            background-color: #005a4f;
-        }
-        /* Ẩn text "Choose file" và "No file chosen" */
-        input[type="file"] {
-            width: 0.1px;
-            height: 0.1px;
-            opacity: 0;
-            overflow: hidden;
-            position: absolute;
-            z-index: -1;
-        }
         <?php 
-        include 'assets/CSS/navbar.css';
-        include 'assets/CSS/footer.css';
+            include 'assets/CSS/navbar.css';
+            include 'assets/CSS/footer.css';
+            include 'assets/CSS/thongtincanhan.css';
         ?>
     </style>
 </head>
 <body>
-<?php
-    include 'navbar.php';
-    ?>
-    <div class="profile-container">
-        <div class="profile-header">
-            <div class="avatar-container">
-                <img src="images/9-anh-dai-dien-trang-inkythuatso-03-15-27-03.jpg" alt="Ảnh đại diện" class="profile-image" id="avatarPreview">
-                <label for="avatarUpload" class="change-avatar-btn">
-                    <i class="fas fa-upload"></i> Thay đổi ảnh đại diện
-                </label>
-                <input type="file" id="avatarUpload" class="d-none" accept="image/*">
-            </div>
-            <h1>Thông Tin Cá Nhân</h1>
+    <?php include 'navbar.php'; ?>
+
+    <div class="container">
+        <div class="profile-container">
+            <h1>Thông tin cá nhân</h1>
+            
+            <?php if (!empty($message)): ?>
+                <div class="message <?php echo $messageType; ?>">
+                    <?php echo $message; ?>
+                </div>
+            <?php endif; ?>
+
+            <form method="POST" action="" class="profile-form">
+                <div class="form-group">
+                    <label for="fullname">Họ và tên:</label>
+                    <input type="text" id="fullname" name="fullname" 
+                           value="<?php echo htmlspecialchars($user['Fullname']); ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Số điện thoại:</label>
+                    <input type="tel" id="phone" name="phone" 
+                           value="<?php echo htmlspecialchars($user['Phone']); ?>" required>
+                </div>
+
+                <div class="password-section">
+                    <h2>Đổi mật khẩu</h2>
+                    <div class="form-group">
+                        <label for="current_password">Mật khẩu hiện tại:</label>
+                        <input type="password" id="current_password" name="current_password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new_password">Mật khẩu mới:</label>
+                        <input type="password" id="new_password" name="new_password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm_password">Xác nhận mật khẩu mới:</label>
+                        <input type="password" id="confirm_password" name="confirm_password">
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="save-button">
+                        <i class="fas fa-save"></i> Lưu thay đổi
+                    </button>
+                </div>
+            </form>
         </div>
-
-        <div class="profile-section">
-            <h2>Thông Tin Cơ Bản</h2>
-            <div class="profile-info">
-                <div class="info-label">Họ và Tên:</div>
-                <div class="info-content">Nguyễn Văn A</div>
-
-                <div class="info-label">Ngày Sinh:</div>
-                <div class="info-content">01/01/1990</div>
-
-                <div class="info-label">Email:</div>
-                <div class="info-content">nguyenvana@email.com</div>
-
-                <div class="info-label">Số Điện Thoại:</div>
-                <div class="info-content">0123456789</div>
-            </div>
-        </div>
-
-        <div class="profile-section">
-            <h2>Địa Chỉ</h2>
-            <div class="profile-info">
-                <div class="info-label">Địa Chỉ:</div>
-                <div class="info-content">123 Đường ABC, Phường XYZ</div>
-
-                <div class="info-label">Quận/Huyện:</div>
-                <div class="info-content">Quận 1</div>
-
-                <div class="info-label">Thành Phố:</div>
-                <div class="info-content">TP. Hồ Chí Minh</div>
-            </div>
-        </div>
-
-        <div class="profile-section">
-            <h2>Thông Tin Bổ Sung</h2>
-            <div class="profile-info">
-                <div class="info-label">Sở Thích:</div>
-                <div class="info-content">Thể thao, Đọc sách, Du lịch</div>
-
-                <div class="info-label">Môn Thể Thao Yêu Thích:</div>
-                <div class="info-content">Bóng đá, Cầu lông</div>
-            </div>
-        </div>
-
-        <button class="edit-button">Chỉnh Sửa Thông Tin</button>
     </div>
 
-    <!-- Add Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <script>
-    document.getElementById('avatarUpload').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('avatarPreview').src = e.target.result;
-            }
-            reader.readAsDataURL(file);
-        }
-    });
-    </script>
-<?php
- include 'footer.php';
- ?>
+    <?php include 'footer.php'; ?>
 </body>
 </html>
